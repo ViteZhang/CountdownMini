@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="hint">{{mode === 'export' ? '下方按钮将打包你的所有数据 你可以保存到本地或发送给自己' : '这是我们存储的关于你的全部数据'}}</view>
+
+  <view wx:if="{{loading}}" class="loading">加载中...</view>
+
+  <view wx:else>
+    <view class="section">
+      <view class="section-title">基础信息</view>
+      <view class="kv"><text class="k">昵称</text><text class="v">{{data.profile.nickname}}</text></view>
+      <view class="kv"><text class="k">省份</text><text class="v">{{data.profile.provinceName}}</text></view>
+      <view class="kv"><text class="k">年级</text><text class="v">{{data.profile.gradeLabel}}</text></view>
+      <view class="kv"><text class="k">梦想院校</text><text class="v">{{data.profile.dreamSchool}}</text></view>
+    </view>
+    <view class="section">
+      <view class="section-title">陪伴数据</view>
+      <view class="kv"><text class="k">陪伴天数</text><text class="v">{{data.stats.days}}</text></view>
+      <view class="kv"><text class="k">对话次数</text><text class="v">{{data.stats.chats}}</text></view>
+      <view class="kv"><text class="k">打卡天数</text><text class="v">{{data.stats.checkins}}</text></view>
+    </view>
+
+    <button wx:if="{{mode === 'export'}}" class="btn-primary export-btn" bindtap="exportJson">复制 JSON 到剪贴板</button>
+  </view>
+</view>

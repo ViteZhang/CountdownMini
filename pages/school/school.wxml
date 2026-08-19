@@ -1,0 +1,46 @@
+<view class="page">
+  <view class="search-bar">
+    <text class="search-icon">🔍</text>
+    <input
+      class="search-input"
+      placeholder="搜索院校或自定义"
+      value="{{keyword}}"
+      bindinput="onSearch"
+      focus="{{true}}"
+    />
+    <view wx:if="{{keyword}}" class="search-clear" bindtap="clear">×</view>
+  </view>
+
+  <scroll-view scroll-y class="list">
+    <view wx:if="{{!keyword}}" class="section">
+      <view class="section-title">热门院校</view>
+      <view class="hot-grid">
+        <view
+          wx:for="{{hot}}"
+          wx:key="*this"
+          class="hot-item {{current === item ? 'hot-active' : ''}}"
+          data-name="{{item}}"
+          bindtap="pick"
+        >{{item}}</view>
+      </view>
+    </view>
+
+    <view wx:if="{{filtered.length}}">
+      <view
+        wx:for="{{filtered}}"
+        wx:key="*this"
+        class="row"
+        data-name="{{item}}"
+        bindtap="pick"
+      >
+        <view class="row-name">{{item}}</view>
+        <view wx:if="{{current === item}}" class="row-check">✓</view>
+      </view>
+    </view>
+
+    <view wx:if="{{keyword && !inLibrary}}" class="custom-row" bindtap="pickCustom">
+      <view class="custom-label">自定义梦想院校：<text class="custom-name">{{keyword}}</text></view>
+      <view class="custom-arrow">›</view>
+    </view>
+  </scroll-view>
+</view>

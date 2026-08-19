@@ -1,0 +1,111 @@
+<view class="page">
+  <!-- 自定义导航占位 -->
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 顶部 Sticky Header -->
+  <view class="sticky-header {{scrollTop > 240 ? 'sticky-visible' : ''}}" style="padding-top: {{statusBarHeight}}px;">
+    <view class="sticky-inner">
+      <view class="sticky-province" bindtap="openProvince">
+        <text class="loc-icon">📍</text>
+        <text class="sticky-province-name">{{province.name || '选择省份'}}</text>
+        <text class="dropdown">▾</text>
+      </view>
+      <view class="sticky-days"><text class="sticky-num">{{days}}</text>天</view>
+      <view class="sticky-mode">{{examTypeLabel}}</view>
+    </view>
+  </view>
+
+  <scroll-view class="scroll" scroll-y bindscroll="onScroll" refresher-enabled="{{true}}" refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
+
+    <!-- 顶部区域：省份切换 -->
+    <view class="header" style="padding-top: {{statusBarHeight + 24}}px;">
+      <view class="province" bindtap="openProvince">
+        <text class="loc-icon">📍</text>
+        <text class="province-name">{{province.name || '选择省份'}}</text>
+        <text class="dropdown">▾</text>
+      </view>
+      <view class="exam-mode">{{examTypeLabel}}</view>
+    </view>
+
+    <!-- 主倒计时 -->
+    <view class="hero">
+      <view class="hero-prefix">距离 {{examYear}} 年高考还有</view>
+      <view class="hero-num" bindlongpress="shareCountdown">
+        <text class="num">{{days}}</text>
+        <text class="day-unit">天</text>
+      </view>
+      <view class="hms">
+        <text class="hms-num">{{hh}}</text> 时
+        <text class="hms-num">{{mm}}</text> 分
+        <text class="hms-num">{{ss}}</text> 秒
+      </view>
+      <view class="exam-date" bindtap="toggleMilestones">
+        {{examDateText}}
+        <text class="caret">{{showMilestones ? '∧' : '∨'}}</text>
+      </view>
+      <view wx:if="{{showMilestones}}" class="milestones fade-in">
+        <view class="milestone" wx:for="{{milestones}}" wx:key="label">
+          <text class="ms-label">{{item.label}}</text>
+          <text class="ms-date">{{item.date}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 每日壁纸卡片 -->
+    <view class="card wallpaper-card">
+      <view class="card-head">
+        <view class="card-title"><text class="title-icon">🎨</text>今日壁纸</view>
+        <view class="card-action" bindtap="saveWallpaper">保存 →</view>
+      </view>
+      <view class="wallpaper-thumb" bindtap="previewWallpaper">
+        <canvas type="2d" id="wallpaperCanvas" class="wallpaper-canvas"></canvas>
+        <view class="wallpaper-overlay">
+          <view class="wp-days">{{days}} 天</view>
+          <view class="wp-school">{{dreamSchool || '理想大学'}}</view>
+          <view class="wp-quote">{{wallpaperQuote}}</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 心情打卡 -->
+    <view class="card mood-card">
+      <view class="card-head">
+        <view class="card-title"><text class="title-icon">💭</text>今天感觉怎么样？</view>
+        <view wx:if="{{moodToday !== null}}" class="card-sub">今天的你：{{moodLabel}}</view>
+      </view>
+      <view class="moods">
+        <view
+          wx:for="{{moods}}"
+          wx:key="level"
+          class="mood-item {{moodToday === item.level ? 'mood-active' : moodToday !== null ? 'mood-dim' : ''}}"
+          data-level="{{item.level}}"
+          bindtap="checkin"
+        >
+          <text class="mood-emoji">{{item.emoji}}</text>
+          <text class="mood-label">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 今日计划占位 -->
+    <view class="card plan-card" bindtap="bookPlan">
+      <view class="card-head">
+        <view class="card-title"><text class="title-icon">📅</text>今日计划</view>
+        <text class="card-action">预约 →</text>
+      </view>
+      <view class="plan-body">
+        <view class="plan-tag">即将上线</view>
+        <view class="plan-desc">AI 学习规划官「同行」将在 V1.1 上线，帮你把每天该做什么列得清清楚楚。点击预约首发体验。</view>
+      </view>
+    </view>
+
+    <!-- 金句 -->
+    <view class="quote-card" bindtap="shareQuote">
+      <text class="quote-mark">"</text>
+      <view class="quote-text">{{dailyQuote}}</view>
+      <view class="quote-share">分享给同桌 →</view>
+    </view>
+
+    <view class="bottom-pad"></view>
+  </scroll-view>
+</view>

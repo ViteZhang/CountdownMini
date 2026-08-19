@@ -1,0 +1,145 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FFF8EC 0%, #FFE4C1 30%, #FFF8EC 100%);
+}
+
+.topbar {
+  height: 88rpx;
+  padding: 0 32rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.title { font-size: 36rpx; font-weight: 600; color: #1A1A1A; }
+.settings-icon {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  color: #555;
+}
+
+.scroll {
+  height: calc(100vh - 88rpx - 100rpx);
+}
+
+/* 用户卡片 */
+.profile-card {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  margin: 0 32rpx 24rpx;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  gap: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(212, 87, 42, 0.04);
+}
+.avatar {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FFC857, #D4572A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.avatar-img { width: 100%; height: 100%; }
+.avatar-fallback { color: #fff; font-size: 48rpx; font-weight: 600; }
+.profile-info { flex: 1; line-height: 1.4; }
+.profile-name { font-size: 36rpx; font-weight: 600; color: #1A1A1A; }
+.profile-meta { font-size: 24rpx; color: #888; margin-top: 8rpx; }
+.profile-arrow { color: #BBB; font-size: 36rpx; }
+
+/* 通用卡片 */
+.card {
+  background: #FFFFFF;
+  margin: 0 32rpx 24rpx;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  box-shadow: 0 4rpx 24rpx rgba(212, 87, 42, 0.04);
+}
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+.card-title {
+  font-size: 28rpx;
+  font-weight: 500;
+  color: #1A1A1A;
+  display: flex;
+  align-items: center;
+}
+.card-icon { margin-right: 12rpx; font-size: 28rpx; }
+.card-arrow { color: #BBB; font-size: 32rpx; }
+
+.school-name {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #D4572A;
+  margin-top: 8rpx;
+}
+.school-empty { font-size: 26rpx; color: #888; }
+
+.stats-card .card-head { margin-bottom: 24rpx; }
+.stats-row {
+  display: flex;
+  align-items: center;
+}
+.stat {
+  flex: 1;
+  text-align: center;
+}
+.stat-num {
+  font-family: "SF Pro Display", sans-serif;
+  font-size: 56rpx;
+  font-weight: 700;
+  color: #D4572A;
+  line-height: 1.1;
+}
+.stat-label { font-size: 24rpx; color: #888; margin-top: 4rpx; }
+.stat-divider { width: 1rpx; height: 64rpx; background: #EEEEEE; }
+
+/* 信箱 */
+.letter-card {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  background: linear-gradient(135deg, #FFF8EC, #FFE4C1);
+}
+.letter-ready { background: linear-gradient(135deg, #FFE7C2, #FFC857); }
+.letter-icon { font-size: 56rpx; }
+.letter-body { flex: 1; }
+.letter-title { font-size: 30rpx; font-weight: 600; color: #1A1A1A; }
+.letter-sub { font-size: 24rpx; color: #555; margin-top: 4rpx; }
+
+/* 菜单 */
+.menu-card { padding: 0; overflow: hidden; }
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 32rpx;
+}
+.menu-icon { font-size: 32rpx; margin-right: 20rpx; }
+.menu-label { flex: 1; font-size: 28rpx; color: #1A1A1A; }
+.menu-arrow { color: #BBB; font-size: 32rpx; }
+.menu-divider { height: 1rpx; background: #F2F2F2; margin-left: 84rpx; }
+
+/* 邀请按钮 */
+.invite-btn {
+  margin: 8rpx 32rpx 24rpx;
+  background: #D4572A;
+  color: #fff;
+  border-radius: 24rpx;
+  padding: 28rpx 0;
+  text-align: center;
+  font-size: 30rpx;
+  font-weight: 500;
+}
+.invite-icon { margin-right: 12rpx; }
+
+.bottom-pad { height: 120rpx; }

@@ -1,0 +1,23 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">
+    <view class="skeleton" style="height: 200rpx; margin: 16rpx 0;"></view>
+    <view class="skeleton" style="height: 200rpx; margin: 16rpx 0;"></view>
+  </view>
+
+  <view wx:elif="{{list.length === 0}}" class="empty">
+    <view class="empty-icon">💌</view>
+    <view class="empty-text">还没有来自未来的信</view>
+    <view class="btn-primary empty-btn" bindtap="generate">写一封</view>
+  </view>
+
+  <view wx:else>
+    <view class="letter-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="open">
+      <view class="letter-head">
+        <view class="letter-school">{{item.dream_school}}</view>
+        <view class="letter-date">{{item.dateText}}</view>
+      </view>
+      <view class="letter-preview">{{item.preview}}</view>
+    </view>
+    <view class="new-btn" bindtap="generate">+ 重新写一封</view>
+  </view>
+</view>

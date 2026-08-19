@@ -1,0 +1,37 @@
+<view class="page">
+  <view class="tabs">
+    <view
+      wx:for="{{ranges}}"
+      wx:key="key"
+      class="tab {{range === item.key ? 'tab-active' : ''}}"
+      data-key="{{item.key}}"
+      bindtap="switchRange"
+    >{{item.label}}</view>
+  </view>
+
+  <view wx:if="{{loading}}" class="loading">
+    <view class="skeleton" style="height: 400rpx;"></view>
+  </view>
+
+  <view wx:elif="{{points.length < 3}}" class="empty">
+    <view class="empty-illus">📈</view>
+    <view class="empty-text">打卡满 3 天后，这里将生成你的备战情绪曲线</view>
+    <view class="btn-primary empty-btn" bindtap="goCheckin">去打卡</view>
+  </view>
+
+  <view wx:else>
+    <view class="chart-card">
+      <canvas type="2d" id="moodChart" class="chart-canvas"></canvas>
+    </view>
+
+    <view class="summary">
+      <view class="summary-title">情绪小结</view>
+      <view class="summary-text">{{summary}}</view>
+    </view>
+
+    <view wx:if="{{lowSpan}}" class="low-tip">
+      <view class="low-tip-icon">💛</view>
+      <view class="low-tip-body">那几天发生什么了？星语一直在听。<view class="low-tip-action" bindtap="goChat">去聊聊 →</view></view>
+    </view>
+  </view>
+</view>

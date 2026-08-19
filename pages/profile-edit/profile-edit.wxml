@@ -1,0 +1,41 @@
+<view class="page">
+  <view wx:if="{{firstTime}}" class="first-tip">
+    填好头像和昵称 星语就知道该怎么称呼你了
+  </view>
+
+  <view class="avatar-block">
+    <button class="avatar-btn" open-type="chooseAvatar" bind:chooseavatar="onChooseAvatar">
+      <image wx:if="{{avatarUrl}}" class="avatar" src="{{avatarUrl}}" mode="aspectFill" />
+      <view wx:else class="avatar avatar-placeholder">+</view>
+      <view class="avatar-hint">点击更换头像</view>
+    </button>
+  </view>
+
+  <view class="form">
+    <view class="form-row">
+      <view class="form-label">昵称</view>
+      <input
+        class="form-input"
+        type="nickname"
+        placeholder="请输入昵称"
+        value="{{nickname}}"
+        bindblur="onNickname"
+        maxlength="16"
+      />
+    </view>
+    <view class="form-row" bindtap="pickGrade">
+      <view class="form-label">年级</view>
+      <view class="form-value">{{gradeLabel}} ›</view>
+    </view>
+    <view class="form-row" bindtap="goProvince">
+      <view class="form-label">省份</view>
+      <view class="form-value">{{provinceName}} ›</view>
+    </view>
+    <view class="form-row" bindtap="goSchool">
+      <view class="form-label">梦想院校</view>
+      <view class="form-value">{{dreamSchool || '点击设置'}} ›</view>
+    </view>
+  </view>
+
+  <button class="btn-primary save-btn" bindtap="save" disabled="{{saving}}">{{firstTime ? '完成 进入我的高三' : '保存'}}</button>
+</view>

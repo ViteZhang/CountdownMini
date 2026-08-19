@@ -1,0 +1,32 @@
+{
+  "setting": {
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "uglifyFileName": false,
+    "enhance": true,
+    "packNpmRelationList": [],
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useCompilerPlugins": false,
+    "minifyWXML": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "2.32.3",
+  "appid": "wxe92484b5f203b8d8",
+  "projectname": "gkplan",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "miniprogramRoot": "./",
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "交互页面" },
+      { "type": "file", "value": "PRD_高三同行_MVP_V1.0.md" },
+      { "type": "file", "value": "《高三同行 · MVP V1.0》产品交互设计方案.md" }
+    ],
+    "include": []
+  },
+  "editorSetting": {}
+}

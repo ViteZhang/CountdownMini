@@ -1,0 +1,93 @@
+<view class="page">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <view class="topbar">
+    <view class="title">我的</view>
+    <view class="settings-icon" bindtap="openSettings">⚙</view>
+  </view>
+
+  <scroll-view scroll-y class="scroll">
+    <!-- 用户卡片 -->
+    <view class="profile-card" bindtap="editProfile">
+      <view class="avatar">
+        <image wx:if="{{avatarUrl}}" src="{{avatarUrl}}" mode="aspectFill" class="avatar-img" />
+        <text wx:else class="avatar-fallback">{{nickname ? nickname[0] : '?'}}</text>
+      </view>
+      <view class="profile-info">
+        <view class="profile-name">{{nickname || '点击登录'}}</view>
+        <view class="profile-meta">{{provinceName}} · {{gradeLabel}} · 距高考 {{days}} 天</view>
+      </view>
+      <view class="profile-arrow">›</view>
+    </view>
+
+    <!-- 梦想院校 -->
+    <view class="card school-card" bindtap="openSchool">
+      <view class="card-head">
+        <view class="card-title"><text class="card-icon">🎓</text>我的梦想院校</view>
+        <view class="card-arrow">›</view>
+      </view>
+      <view wx:if="{{dreamSchool}}" class="school-name">{{dreamSchool}}</view>
+      <view wx:else class="school-empty">点击设置 让星语为你写一封来自未来的信</view>
+    </view>
+
+    <!-- 陪伴数据 -->
+    <view class="card stats-card">
+      <view class="card-head"><view class="card-title"><text class="card-icon">📊</text>我的陪伴</view></view>
+      <view class="stats-row">
+        <view class="stat" bindtap="goAchievement">
+          <view class="stat-num">{{stats.days}}</view>
+          <view class="stat-label">陪伴天数</view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat" bindtap="goHistory">
+          <view class="stat-num">{{stats.chats}}</view>
+          <view class="stat-label">对话次数</view>
+        </view>
+        <view class="stat-divider"></view>
+        <view class="stat" bindtap="goMoodCurve">
+          <view class="stat-num">{{stats.checkins}}</view>
+          <view class="stat-label">打卡天数</view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 未来的你信箱 -->
+    <view class="card letter-card {{hasLetter ? 'letter-ready' : ''}}" bindtap="openLetter">
+      <view class="letter-icon">💌</view>
+      <view class="letter-body">
+        <view class="letter-title">未来的你信箱</view>
+        <view class="letter-sub">{{letterStatus}}</view>
+      </view>
+      <view class="card-arrow">›</view>
+    </view>
+
+    <!-- 其他入口 -->
+    <view class="card menu-card">
+      <view class="menu-item" bindtap="goMoodCurve">
+        <text class="menu-icon">📅</text>
+        <text class="menu-label">我的心情曲线</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="goHistory">
+        <text class="menu-icon">📝</text>
+        <text class="menu-label">我的历史对话</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="goWallpapers">
+        <text class="menu-icon">🖼</text>
+        <text class="menu-label">我保存的壁纸</text>
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+
+    <!-- 邀请 -->
+    <button class="invite-btn" open-type="share">
+      <text class="invite-icon">📣</text>
+      <text>邀请同桌一起加入</text>
+    </button>
+
+    <view class="bottom-pad"></view>
+  </scroll-view>
+</view>

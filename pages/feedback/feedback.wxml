@@ -1,0 +1,27 @@
+<view class="page">
+  <view class="hint">把你的吐槽、建议、想要的功能 告诉我们</view>
+
+  <view class="category">
+    <view
+      wx:for="{{cats}}"
+      wx:key="*this"
+      class="cat {{cat === item ? 'cat-active' : ''}}"
+      data-name="{{item}}"
+      bindtap="pickCat"
+    >{{item}}</view>
+  </view>
+
+  <textarea
+    class="textarea"
+    placeholder="说说看 不超过 500 字"
+    value="{{content}}"
+    maxlength="500"
+    bindinput="onInput"
+    auto-height
+  />
+  <view class="count">{{content.length}}/500</view>
+
+  <input class="contact" placeholder="留个联系方式（选填）" value="{{contact}}" bindinput="onContact" />
+
+  <button class="btn-primary submit" bindtap="submit" disabled="{{!content || submitting}}">提交</button>
+</view>

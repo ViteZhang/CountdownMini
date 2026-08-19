@@ -1,0 +1,8 @@
+# macOS
+.DS_Store
+
+# Node
+node_modules/
+
+# 微信开发者工具本地私有配置
+project.private.config.json

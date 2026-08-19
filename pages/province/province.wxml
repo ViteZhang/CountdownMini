@@ -1,0 +1,66 @@
+<view class="page">
+  <view class="search-bar">
+    <text class="search-icon">🔍</text>
+    <input class="search-input" placeholder="搜索省份" value="{{keyword}}" bindinput="onSearch" confirm-type="search" />
+    <view wx:if="{{keyword}}" class="search-clear" bindtap="clearSearch">×</view>
+  </view>
+
+  <scroll-view class="list" scroll-y scroll-into-view="{{scrollTo}}">
+    <view wx:if="{{!keyword}}">
+      <view class="section">
+        <view class="section-title">热门省份</view>
+        <view class="hot-grid">
+          <view
+            wx:for="{{hotList}}"
+            wx:key="code"
+            class="hot-item {{current.code === item.code ? 'hot-active' : ''}}"
+            data-code="{{item.code}}"
+            bindtap="pick"
+          >{{item.name}}</view>
+        </view>
+      </view>
+
+      <view wx:for="{{groups}}" wx:key="letter" class="group" id="g-{{item.letter}}">
+        <view class="group-letter">{{item.letter}}</view>
+        <view
+          wx:for="{{item.items}}"
+          wx:for-item="p"
+          wx:key="code"
+          class="row"
+          data-code="{{p.code}}"
+          bindtap="pick"
+        >
+          <view class="row-name">{{p.name}}</view>
+          <view class="row-mode">{{examTypeLabel[p.examType]}}</view>
+          <view wx:if="{{current.code === p.code}}" class="row-check">✓</view>
+        </view>
+      </view>
+    </view>
+
+    <view wx:else>
+      <view wx:if="{{filtered.length}}">
+        <view
+          wx:for="{{filtered}}"
+          wx:key="code"
+          class="row"
+          data-code="{{item.code}}"
+          bindtap="pick"
+        >
+          <view class="row-name">{{item.name}}</view>
+          <view class="row-mode">{{examTypeLabel[item.examType]}}</view>
+        </view>
+      </view>
+      <view wx:else class="empty">没有找到匹配的省份</view>
+    </view>
+  </scroll-view>
+
+  <view class="index-bar">
+    <view
+      wx:for="{{letters}}"
+      wx:key="*this"
+      class="index-item"
+      data-letter="{{item}}"
+      bindtap="jumpLetter"
+    >{{item}}</view>
+  </view>
+</view>

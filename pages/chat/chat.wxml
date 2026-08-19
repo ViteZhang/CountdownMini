@@ -1,0 +1,110 @@
+<view class="page">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <!-- 顶部栏 -->
+  <view class="topbar">
+    <view class="topbar-left">
+      <view class="ai-avatar"><text>星</text></view>
+      <view class="ai-info">
+        <view class="ai-name">星语 <view class="online-dot"></view></view>
+        <view class="ai-status">在线 · 我都在</view>
+      </view>
+    </view>
+    <view class="topbar-right">
+      <view class="topbar-icon" bindtap="openMoodCurve">📊</view>
+      <view class="topbar-icon" bindtap="openHistory">🕒</view>
+    </view>
+  </view>
+
+  <!-- 危机干预求助组件(常驻置顶) -->
+  <view wx:if="{{showSafetyBar}}" class="safety-bar">
+    <view class="safety-icon">💛</view>
+    <view class="safety-body">
+      <view class="safety-title">你现在不是一个人</view>
+      <view class="safety-line">24h 心理援助热线 <text class="safety-tel" bindtap="callHotline" data-num="400-161-9995">400-161-9995</text></view>
+    </view>
+    <view class="safety-close" bindtap="closeSafety">×</view>
+  </view>
+
+  <!-- 网络断开 -->
+  <view wx:if="{{networkOffline}}" class="net-banner">当前网络连接已断开，请检查网络设置</view>
+
+  <!-- 消息列表 -->
+  <scroll-view
+    class="msgs"
+    scroll-y
+    scroll-into-view="{{scrollTo}}"
+    scroll-with-animation
+    enable-back-to-top
+  >
+    <view wx:for="{{messages}}" wx:key="id" id="m-{{item.id}}" class="msg-row {{item.role === 'USER' ? 'msg-user' : item.role === 'SYSTEM' ? 'msg-system' : 'msg-ai'}}">
+      <!-- AI 消息 -->
+      <block wx:if="{{item.role === 'AI'}}">
+        <view class="bubble-ai" bindlongpress="onLongPressAI" data-id="{{item.id}}">
+          <text class="bubble-text">{{item.content}}</text>
+          <view wx:if="{{item.streaming}}" class="typing-dots">
+            <view class="dot"></view><view class="dot"></view><view class="dot"></view>
+          </view>
+          <view wx:if="{{item.feedback}}" class="fb-tag">{{item.feedback === 'GOOD' ? '· 已标记温暖' : '· 已反馈不够好'}}</view>
+        </view>
+      </block>
+
+      <!-- 用户消息 -->
+      <block wx:elif="{{item.role === 'USER'}}">
+        <view class="bubble-user" bindlongpress="onLongPressUser" data-id="{{item.id}}">
+          <text class="bubble-text">{{item.content}}</text>
+        </view>
+      </block>
+
+      <!-- 系统提示 -->
+      <block wx:else>
+        <view class="system-tip" bindtap="onSystemTap" data-action="{{item.action}}">{{item.content}}</view>
+      </block>
+    </view>
+
+    <!-- 危机资源卡片 -->
+    <view wx:if="{{showSafetyCard}}" class="safety-card">
+      <view class="safety-card-title">💛 你现在不是一个人</view>
+      <view class="safety-card-line" bindtap="callHotline" data-num="400-161-9995">
+        全国心理援助热线（24 小时）<text class="safety-tel">400-161-9995</text>
+      </view>
+      <view class="safety-card-line" bindtap="callHotline" data-num="010-82951332">
+        北京心理危机研究与干预中心 <text class="safety-tel">010-82951332</text>
+      </view>
+      <view class="safety-card-tip">这些电话是免费的，匿名的，可以只是说话。</view>
+    </view>
+
+    <view class="bottom-pad"></view>
+  </scroll-view>
+
+  <!-- 快捷情绪标签 -->
+  <scroll-view wx:if="{{showQuickTags}}" class="quick-tags" scroll-x enable-flex>
+    <view
+      wx:for="{{quickTags}}"
+      wx:key="key"
+      class="quick-tag"
+      data-key="{{item.key}}"
+      data-label="{{item.label}}"
+      bindtap="onQuickTag"
+    >{{item.label}}</view>
+  </scroll-view>
+
+  <!-- 输入区 -->
+  <view class="input-wrap" style="padding-bottom: {{safeBottom}}px;">
+    <input
+      class="input"
+      placeholder="想说点什么..."
+      value="{{draft}}"
+      bindinput="onInput"
+      bindconfirm="onSend"
+      confirm-type="send"
+      adjust-position="{{true}}"
+      maxlength="500"
+      disabled="{{sending}}"
+    />
+    <view class="send-btn {{draft && !sending ? 'send-active' : ''}}" bindtap="onSend">
+      <text wx:if="{{!sending}}">→</text>
+      <text wx:else>···</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+
+  <swiper class="swiper" current="{{current}}" bindchange="onSwiperChange" indicator-dots="{{false}}" duration="400" easing-function="easeOut">
+    <swiper-item wx:for="{{slides}}" wx:key="title">
+      <view class="slide slide-{{index}}">
+        <view class="illus">
+          <view class="illus-circle"></view>
+          <text class="illus-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="title">{{item.title}}</view>
+        <view class="subtitle">{{item.subtitle}}</view>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <view class="dots">
+    <view wx:for="{{slides}}" wx:key="*this" class="dot {{current === index ? 'dot-active' : ''}}"></view>
+  </view>
+
+  <view class="footer">
+    <button wx:if="{{current < 2}}" class="btn-primary footer-btn" bindtap="next">下一步</button>
+    <button wx:else class="btn-primary footer-btn" bindtap="enter">进入我的高三</button>
+    <view wx:if="{{current < 2}}" class="skip" bindtap="enter">跳过</view>
+  </view>
+</view>

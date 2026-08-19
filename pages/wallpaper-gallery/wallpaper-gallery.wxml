@@ -1,0 +1,16 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">
+    <view class="skeleton" style="height: 320rpx;"></view>
+  </view>
+  <view wx:elif="{{list.length === 0}}" class="empty">
+    <view class="empty-icon">🖼</view>
+    <view class="empty-text">还没有保存过壁纸</view>
+    <view class="empty-sub">回到首页 保存你的第一张</view>
+  </view>
+  <view wx:else class="grid">
+    <view wx:for="{{list}}" wx:key="id" class="grid-item" data-url="{{item.image_url}}" bindtap="preview">
+      <image src="{{item.image_url}}" mode="aspectFill" class="grid-img" />
+      <view class="grid-date">{{item.date}}</view>
+    </view>
+  </view>
+</view>

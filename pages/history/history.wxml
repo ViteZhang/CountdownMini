@@ -1,0 +1,30 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="loading">
+    <view class="skeleton" style="height: 120rpx; margin: 16rpx 0;"></view>
+    <view class="skeleton" style="height: 120rpx; margin: 16rpx 0;"></view>
+    <view class="skeleton" style="height: 120rpx; margin: 16rpx 0;"></view>
+  </view>
+
+  <view wx:elif="{{sessions.length === 0}}" class="empty">
+    <view class="empty-icon">📭</view>
+    <view class="empty-text">还没有历史对话</view>
+    <view class="empty-sub">去树洞 和星语说说今天吧</view>
+  </view>
+
+  <view wx:else>
+    <view
+      wx:for="{{sessions}}"
+      wx:key="id"
+      class="session"
+      data-id="{{item.id}}"
+      bindtap="openSession"
+    >
+      <view class="session-head">
+        <view class="session-date">{{item.dateText}}</view>
+        <view class="session-meta">{{item.message_count}} 条 · {{item.timeText}}</view>
+      </view>
+      <view class="session-preview">{{item.preview}}</view>
+      <view wx:if="{{item.risk_level === 'DANGER' || item.risk_level === 'WARNING'}}" class="risk-tag">{{item.risk_level === 'DANGER' ? '安全提醒' : '关注'}}</view>
+    </view>
+  </view>
+</view>
