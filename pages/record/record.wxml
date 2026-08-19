@@ -1,0 +1,68 @@
+<view class="cd-page record {{theme}}">
+  <view style="height: {{statusBarHeight}}px;"></view>
+
+  <view class="head"><view class="head-title">记录</view></view>
+
+  <view class="segwrap">
+    <view class="seg {{tab === 'cal' ? 'on' : ''}}" data-tab="cal" bindtap="switchTab">日历</view>
+    <view class="seg {{tab === 'timeline' ? 'on' : ''}}" data-tab="timeline" bindtap="switchTab">心里话</view>
+  </view>
+
+  <view class="summary">
+    <view>累计坚持 <text class="s-b">{{totalCheckins}}</text> 天</view>
+    <view>写下 <text class="s-b">{{totalNotes}}</text> 句话</view>
+    <view>已走过 <text class="s-b">{{passed}}</text> 天</view>
+  </view>
+
+  <scroll-view class="scroll" scroll-y>
+    <!-- 日历 -->
+    <block wx:if="{{tab === 'cal'}}">
+      <view class="calhead">
+        <view class="cal-arrow" data-n="-1" bindtap="shiftMonth">‹</view>
+        <view class="cal-title">{{calTitle}}</view>
+        <view class="cal-arrow" data-n="1" bindtap="shiftMonth">›</view>
+      </view>
+
+      <view class="grid">
+        <view class="wd" wx:for="{{weekdays}}" wx:key="*this">{{item}}</view>
+      </view>
+
+      <view class="grid">
+        <block wx:for="{{cells}}" wx:key="key">
+          <view wx:if="{{item.blank}}" class="day-blank"></view>
+          <view
+            wx:else
+            class="day {{item.has ? 'has' : ''}} {{item.back ? 'back' : ''}} {{item.today ? 'today' : ''}}"
+            data-key="{{item.key}}"
+            bindtap="tapDay"
+          >
+            <text>{{item.day}}</text>
+            <view wx:if="{{item.note}}" class="day-dot"></view>
+          </view>
+        </block>
+      </view>
+
+      <view class="legend">
+        <view class="lg"><view class="lg-i lg-has"></view>已打卡</view>
+        <view class="lg"><view class="lg-i lg-back"></view>补签</view>
+        <view class="lg"><view class="lg-i lg-note"></view>写了心里话</view>
+      </view>
+
+      <view class="foot-note">可补签过去 14 天内的任意一天。断更不会清零，累计只增不减。</view>
+    </block>
+
+    <!-- 心里话时间线 -->
+    <block wx:else>
+      <view wx:if="{{notes.length === 0}}" class="empty">
+        还没有写过心里话。<view class="empty-sub">打卡的时候顺手写一句就好，只有你自己看得到。</view>
+      </view>
+      <view class="note" wx:for="{{notes}}" wx:key="id">
+        <view class="note-meta">{{item.meta}}</view>
+        <view class="note-body">{{item.content}}</view>
+        <view class="note-del" data-id="{{item.id}}" bindtap="deleteNote">删掉</view>
+      </view>
+    </block>
+
+    <view class="bottom-pad"></view>
+  </scroll-view>
+</view>

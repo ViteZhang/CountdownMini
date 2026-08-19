@@ -17,6 +17,10 @@ Page({
     });
   },
 
+  goExamSetup() {
+    wx.navigateTo({ url: '/pages/onboarding/onboarding?edit=1' });
+  },
+
   persist() {
     wx.setStorageSync('settings', {
       daily: this.data.daily,

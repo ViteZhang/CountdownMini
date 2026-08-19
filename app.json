@@ -1,7 +1,8 @@
 {
   "pages": [
-    "pages/onboarding/onboarding",
     "pages/home/home",
+    "pages/onboarding/onboarding",
+    "pages/record/record",
     "pages/chat/chat",
     "pages/profile/profile",
     "pages/province/province",
@@ -19,23 +20,29 @@
     "pages/data-export/data-export"
   ],
   "window": {
-    "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#FFF8EC",
-    "navigationBarTitleText": "高三同行",
-    "navigationBarTextStyle": "black",
-    "backgroundColor": "#FFF8EC"
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#101114",
+    "navigationBarTitleText": "倒计时",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#101114"
   },
   "tabBar": {
-    "color": "#888888",
-    "selectedColor": "#D4572A",
-    "backgroundColor": "#FFFFFF",
-    "borderStyle": "white",
+    "color": "#5D646F",
+    "selectedColor": "#F2F4F7",
+    "backgroundColor": "#101114",
+    "borderStyle": "black",
     "list": [
       {
         "pagePath": "pages/home/home",
         "text": "倒计时",
         "iconPath": "images/tab/home.png",
         "selectedIconPath": "images/tab/home-actived.png"
+      },
+      {
+        "pagePath": "pages/record/record",
+        "text": "记录",
+        "iconPath": "images/tab/chat.png",
+        "selectedIconPath": "images/tab/chat-actived.png"
       },
       {
         "pagePath": "pages/profile/profile",

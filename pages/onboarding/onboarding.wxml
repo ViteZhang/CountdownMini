@@ -1,26 +1,106 @@
-<view class="page">
-  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+<view class="cd-page ob {{theme}}">
+  <view style="height: {{statusBarHeight}}px;"></view>
 
-  <swiper class="swiper" current="{{current}}" bindchange="onSwiperChange" indicator-dots="{{false}}" duration="400" easing-function="easeOut">
-    <swiper-item wx:for="{{slides}}" wx:key="title">
-      <view class="slide slide-{{index}}">
-        <view class="illus">
-          <view class="illus-circle"></view>
-          <text class="illus-emoji">{{item.emoji}}</text>
-        </view>
-        <view class="title">{{item.title}}</view>
-        <view class="subtitle">{{item.subtitle}}</view>
-      </view>
-    </swiper-item>
-  </swiper>
-
-  <view class="dots">
-    <view wx:for="{{slides}}" wx:key="*this" class="dot {{current === index ? 'dot-active' : ''}}"></view>
+  <!-- 顶部：返回 / 步骤 / 跳过 -->
+  <view class="nav" wx:if="{{step < 4}}">
+    <view class="back {{step > 1 ? '' : 'hide'}}" bindtap="prev">‹</view>
+    <view class="steps">
+      <view class="dot {{step >= 1 ? 'on' : ''}}"></view>
+      <view class="dot {{step >= 2 ? 'on' : ''}}"></view>
+      <view class="dot {{step >= 3 ? 'on' : ''}}"></view>
+      <view class="dot {{step >= 4 ? 'on' : ''}}"></view>
+    </view>
+    <view class="skip {{editMode ? 'hide' : ''}}" bindtap="skip">跳过</view>
   </view>
 
-  <view class="footer">
-    <button wx:if="{{current < 2}}" class="btn-primary footer-btn" bindtap="next">下一步</button>
-    <button wx:else class="btn-primary footer-btn" bindtap="enter">进入我的高三</button>
-    <view wx:if="{{current < 2}}" class="skip" bindtap="enter">跳过</view>
+  <!-- ===== 1 考试类型 ===== -->
+  <view class="pane" wx:if="{{step === 1}}">
+    <view class="q">{{editMode ? '改成哪场考试？' : '你在准备哪场考试？'}}</view>
+    <view class="qsub">之后可以随时修改。</view>
+    <view class="opts">
+      <view
+        wx:for="{{types}}"
+        wx:key="key"
+        class="opt {{type === item.key ? 'sel' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="pickType"
+      >
+        <view class="opt-txt">
+          <view class="opt-name">{{item.name}}</view>
+          <view class="opt-desc">{{item.desc}}</view>
+        </view>
+        <view class="tick">✓</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ===== 2 目标日期 ===== -->
+  <view class="pane" wx:if="{{step === 2}}">
+    <view class="q">考试是哪天？</view>
+    <view class="qsub">已经帮你填好了，不对的话可以改。</view>
+
+    <picker mode="date" value="{{targetKey}}" bindchange="onTargetChange">
+      <view class="dateblock">
+        <view class="date-big">{{targetBig}}</view>
+        <view class="date-week">{{targetWeek}} · 点击修改</view>
+      </view>
+    </picker>
+
+    <view class="tip">{{typeTip}}</view>
+
+    <view class="err" wx:if="{{targetErr}}">
+      <view>{{targetErr}}</view>
+      <view class="err-btn" bindtap="fixTargetYear">改成 {{targetFixYear}} 年</view>
+    </view>
+
+    <view class="foot">
+      <view class="cd-cta {{targetErr ? 'disabled' : ''}}" bindtap="next">继续</view>
+    </view>
+  </view>
+
+  <!-- ===== 3 起始日期 ===== -->
+  <view class="pane" wx:if="{{step === 3}}">
+    <view class="q">从哪天开始算起？</view>
+    <view class="qsub">这个日期决定了「你已经走过多少天」——这是这里最重要的一个数字。</view>
+
+    <picker mode="date" value="{{startKey}}" end="{{todayKey}}" bindchange="onStartChange">
+      <view class="dateblock">
+        <view class="date-big">{{startBig}}</view>
+        <view class="date-week">{{startWeek}} · 点击修改</view>
+      </view>
+    </picker>
+
+    <view class="quicks">
+      <view
+        wx:for="{{quicks}}"
+        wx:key="key"
+        class="quick {{item.on ? 'on' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="pickQuick"
+      >{{item.name}}</view>
+    </view>
+
+    <view class="tip">倒计时会告诉你还剩多少，但更重要的是它会记住你已经走了多远。</view>
+    <view class="err" wx:if="{{startErr}}"><view>{{startErr}}</view></view>
+
+    <view class="foot">
+      <view class="cd-cta {{startBlocking ? 'disabled' : ''}}" bindtap="finish">好了</view>
+    </view>
+  </view>
+
+  <!-- ===== 4 第一次看见那个数字 ===== -->
+  <view class="pane reveal" wx:if="{{step === 4}}">
+    <view class="r-num">{{passedShown}}</view>
+    <view class="r-lab">你已经走过的天数</view>
+    <view class="r-bar"><view class="r-bar-fill" style="width: {{barWidth}}%;"></view></view>
+    <view class="r-rest {{revealed ? 'on' : ''}}">还剩 {{remaining}} 天</view>
+    <view class="r-tree {{revealed ? 'on' : ''}}">
+      <view class="tree-glyph">🌱</view>
+      <view class="r-tree-txt">这棵树会在你考完那天开花</view>
+    </view>
+    <view class="r-foot {{revealed ? 'on' : ''}}">
+      <view class="cd-cta" bindtap="enterHome">开始</view>
+      <view class="r-note">不需要登录，记录先存在这台手机里</view>
+    </view>
   </view>
 </view>

@@ -24,7 +24,15 @@ module.exports = {
   call,
   homeInit: () => call('home_init'),
   updateProfile: data => call('user_profile', { action: 'update', ...data }),
-  moodCheckin: (mood_level, date) => call('mood_checkin', { mood_level, date }),
+  // V2：mood_level 选填（传 null 即为纯打卡）；is_backfill 标记补签
+  moodCheckin: (mood_level, date, is_backfill) =>
+    call('mood_checkin', { mood_level, date, is_backfill: !!is_backfill }),
+
+  // V2 同步：拉云端快照 / 上行心里话 / 保存考试配置
+  dataSync: (payload) => call('data_sync', Object.assign({ action: 'pull' }, payload || {})),
+  noteSave: (note) => call('data_sync', { action: 'push_note', note }),
+  noteDelete: (id) => call('data_sync', { action: 'delete_note', id }),
+  examSave: (exam) => call('data_sync', { action: 'save_exam', exam }),
   wallpaperToday: (params) => call('wallpaper_today', params || {}),
   chatWelcome: (params) => call('chat_welcome', params || {}),
   chatSend: (content, session_id, emotion_tag) => call('chat_send', { content, session_id, emotion_tag }),
