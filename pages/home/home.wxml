@@ -1,111 +1,93 @@
-<view class="page">
-  <!-- 自定义导航占位 -->
-  <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
+<view class="cd-page home {{theme}}">
+  <view style="height: {{statusBarHeight}}px;"></view>
 
-  <!-- 顶部 Sticky Header -->
-  <view class="sticky-header {{scrollTop > 240 ? 'sticky-visible' : ''}}" style="padding-top: {{statusBarHeight}}px;">
-    <view class="sticky-inner">
-      <view class="sticky-province" bindtap="openProvince">
-        <text class="loc-icon">📍</text>
-        <text class="sticky-province-name">{{province.name || '选择省份'}}</text>
-        <text class="dropdown">▾</text>
+  <scroll-view class="scroll" scroll-y>
+    <!-- 顶部：考试名 + 目标日期 -->
+    <view class="head">
+      <view class="head-l">
+        <view class="head-title">{{title}}</view>
+        <view class="head-date">{{targetText}}</view>
       </view>
-      <view class="sticky-days"><text class="sticky-num">{{days}}</text>天</view>
-      <view class="sticky-mode">{{examTypeLabel}}</view>
-    </view>
-  </view>
-
-  <scroll-view class="scroll" scroll-y bindscroll="onScroll" refresher-enabled="{{true}}" refresher-triggered="{{refreshing}}" bindrefresherrefresh="onRefresh">
-
-    <!-- 顶部区域：省份切换 -->
-    <view class="header" style="padding-top: {{statusBarHeight + 24}}px;">
-      <view class="province" bindtap="openProvince">
-        <text class="loc-icon">📍</text>
-        <text class="province-name">{{province.name || '选择省份'}}</text>
-        <text class="dropdown">▾</text>
-      </view>
-      <view class="exam-mode">{{examTypeLabel}}</view>
-    </view>
-
-    <!-- 主倒计时 -->
-    <view class="hero">
-      <view class="hero-prefix">距离 {{examYear}} 年高考还有</view>
-      <view class="hero-num" bindlongpress="shareCountdown">
-        <text class="num">{{days}}</text>
-        <text class="day-unit">天</text>
-      </view>
-      <view class="hms">
-        <text class="hms-num">{{hh}}</text> 时
-        <text class="hms-num">{{mm}}</text> 分
-        <text class="hms-num">{{ss}}</text> 秒
-      </view>
-      <view class="exam-date" bindtap="toggleMilestones">
-        {{examDateText}}
-        <text class="caret">{{showMilestones ? '∧' : '∨'}}</text>
-      </view>
-      <view wx:if="{{showMilestones}}" class="milestones fade-in">
-        <view class="milestone" wx:for="{{milestones}}" wx:key="label">
-          <text class="ms-label">{{item.label}}</text>
-          <text class="ms-date">{{item.date}}</text>
-        </view>
+      <view class="head-r">
+        <view class="head-btn" bindtap="toggleTheme">◐</view>
+        <view class="head-btn" bindtap="goSettings">⚙</view>
       </view>
     </view>
 
-    <!-- 每日壁纸卡片 -->
-    <view class="card wallpaper-card">
-      <view class="card-head">
-        <view class="card-title"><text class="title-icon">🎨</text>今日壁纸</view>
-        <view class="card-action" bindtap="saveWallpaper">保存 →</view>
-      </view>
-      <view class="wallpaper-thumb" bindtap="previewWallpaper">
-        <canvas type="2d" id="wallpaperCanvas" class="wallpaper-canvas"></canvas>
-        <view class="wallpaper-overlay">
-          <view class="wp-days">{{days}} 天</view>
-          <view class="wp-school">{{dreamSchool || '理想大学'}}</view>
-          <view class="wp-quote">{{wallpaperQuote}}</view>
-        </view>
-      </view>
-    </view>
-
-    <!-- 心情打卡 -->
-    <view class="card mood-card">
-      <view class="card-head">
-        <view class="card-title"><text class="title-icon">💭</text>今天感觉怎么样？</view>
-        <view wx:if="{{moodToday !== null}}" class="card-sub">今天的你：{{moodLabel}}</view>
-      </view>
-      <view class="moods">
-        <view
-          wx:for="{{moods}}"
-          wx:key="level"
-          class="mood-item {{moodToday === item.level ? 'mood-active' : moodToday !== null ? 'mood-dim' : ''}}"
-          data-level="{{item.level}}"
-          bindtap="checkin"
-        >
-          <text class="mood-emoji">{{item.emoji}}</text>
-          <text class="mood-label">{{item.label}}</text>
-        </view>
+    <!-- 进度环：填充度 = 已走过比例 -->
+    <view class="ringwrap">
+      <canvas type="2d" id="ringCanvas" class="ring-canvas"></canvas>
+      <view class="ring-inner">
+        <block wx:if="{{isExamDay}}">
+          <view class="ring-num ring-today">今天</view>
+        </block>
+        <block wx:else>
+          <view class="ring-num">{{remaining}}</view>
+          <view class="ring-sub">天后见分晓</view>
+        </block>
+        <view class="ring-line"></view>
+        <view class="ring-passed">你已走过 {{passed}} 天</view>
       </view>
     </view>
 
-    <!-- 今日计划占位 -->
-    <view class="card plan-card" bindtap="bookPlan">
-      <view class="card-head">
-        <view class="card-title"><text class="title-icon">📅</text>今日计划</view>
-        <text class="card-action">预约 →</text>
-      </view>
-      <view class="plan-body">
-        <view class="plan-tag">即将上线</view>
-        <view class="plan-desc">AI 学习规划官「同行」将在 V1.1 上线，帮你把每天该做什么列得清清楚楚。点击预约首发体验。</view>
+    <!-- 成长物 -->
+    <view class="cd-card treecard">
+      <canvas type="2d" id="treeCanvas" class="tree-canvas"></canvas>
+      <view class="tree-txt">
+        <view class="tree-title">这棵树会在你考完那天开花</view>
+        <view class="tree-stage">第 {{stageIndex}} 阶段 · {{stageName}}</view>
       </view>
     </view>
 
-    <!-- 金句 -->
-    <view class="quote-card" bindtap="shareQuote">
-      <text class="quote-mark">"</text>
-      <view class="quote-text">{{dailyQuote}}</view>
-      <view class="quote-share">分享给同桌 →</view>
+    <!-- 数据卡 -->
+    <view class="stats">
+      <view class="cd-card stat">
+        <view class="stat-lab">累计坚持</view>
+        <view class="stat-val">{{totalCheckins}}<text class="stat-unit">天</text></view>
+      </view>
+      <view class="cd-card stat">
+        <view class="stat-lab">写下</view>
+        <view class="stat-val">{{totalNotes}}<text class="stat-unit">句话</text></view>
+      </view>
+    </view>
+
+    <!-- 主 CTA -->
+    <view class="cta-wrap">
+      <view class="cd-cta {{checkedToday ? 'cd-cta-done' : ''}}" bindtap="checkin">
+        {{checkedToday ? '今天也在 ✓' : '今天也在'}}
+      </view>
+      <view wx:if="{{checkedToday}}" class="cta-sub">想再补一句心里话，点上面就好</view>
+    </view>
+
+    <!-- 提示条 -->
+    <view class="hintbar" bindtap="goRecord">
+      <view class="hint-txt">{{hintText}}</view>
+      <view class="hint-arrow">›</view>
     </view>
 
     <view class="bottom-pad"></view>
   </scroll-view>
+
+  <!-- 心里话弹层 -->
+  <view class="veil {{sheetOn ? 'on' : ''}}" bindtap="closeSheet"></view>
+  <view class="sheet {{sheetOn ? 'on' : ''}}">
+    <view class="sheet-title">今天也在</view>
+    <view class="sheet-sub">想说点什么吗？选填。</view>
+    <textarea
+      class="sheet-input"
+      value="{{noteText}}"
+      bindinput="onNoteInput"
+      maxlength="200"
+      placeholder="今天数学错了七道，但我把七道都弄懂了。"
+      placeholder-class="ph"
+      show-confirm-bar="{{false}}"
+      adjust-position="{{true}}"
+      disable-default-padding="{{true}}"
+    ></textarea>
+    <view class="sheet-count">{{noteLen}} / 200</view>
+    <view class="sheet-btns">
+      <view class="cd-ghost" bindtap="closeSheet">跳过</view>
+      <view class="cd-cta" bindtap="saveNote">保存</view>
+    </view>
+  </view>
 </view>

@@ -1,4 +1,6 @@
 // cloudfunctions/home_init/index.js
+// V2：除了旧的 profile / moodToday，额外返回累计打卡天数与心里话条数，
+// 让首页在登录态下一次拿全。旧字段一个不动，老客户端继续兼容。
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
@@ -10,7 +12,7 @@ function todayStr() {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
 }
 
-exports.main = async (event, context) => {
+exports.main = async () => {
   const { OPENID } = cloud.getWXContext();
   if (!OPENID) return ok({ profile: null, moodToday: null });
 
@@ -29,12 +31,30 @@ exports.main = async (event, context) => {
     }
   } catch (e) {}
 
+  const t = todayStr();
+
   let moodToday = null;
+  let checkedToday = false;
   try {
-    const t = todayStr();
     const m = await db.collection('mood_checkins').where({ _openid: OPENID, date: t }).limit(1).get();
-    if (m.data.length) moodToday = m.data[0].mood_level;
+    if (m.data.length) {
+      checkedToday = true;                      // 有记录即为「今天来过」
+      const lv = m.data[0].mood_level;
+      moodToday = (lv === undefined) ? null : lv;
+    }
   } catch (e) {}
 
-  return ok({ profile, moodToday });
+  let totalCheckins = 0;
+  try {
+    const c = await db.collection('mood_checkins').where({ _openid: OPENID }).count();
+    totalCheckins = c.total;
+  } catch (e) {}
+
+  let totalNotes = 0;
+  try {
+    const n = await db.collection('notes').where({ _openid: OPENID }).count();
+    totalNotes = n.total;
+  } catch (e) {}
+
+  return ok({ profile, moodToday, checkedToday, totalCheckins, totalNotes });
 };

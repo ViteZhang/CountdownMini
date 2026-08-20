@@ -109,3 +109,78 @@ button::after {
   from { opacity: 0; transform: translateY(8rpx); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ==========================================================================
+   备考倒计时 · V2 设计 token（双主题）
+   旧的 --brand-* 变量保留，老页面继续可用；新页面一律使用下列 token。
+   用法：页面根节点 <view class="cd-page {{themeClass}}">，themeClass 取
+   'cd-light' / 'cd-dark'，由 app.globalData.theme 决定。
+   ========================================================================== */
+
+.cd-light {
+  --cd-bg: #FAFAF8;
+  --cd-surface: #FFFFFF;
+  --cd-surface2: #F2F1ED;
+  --cd-line: #E3E2DD;
+  --cd-t1: #16181C;
+  --cd-t2: #6E6E68;
+  --cd-t3: #9A9A94;
+  --cd-tree: #5E8570;
+  --cd-warn: #A9722C;
+  --cd-on-accent: #FAFAF8;
+}
+
+.cd-dark {
+  --cd-bg: #101114;
+  --cd-surface: #1A1C21;
+  --cd-surface2: #23262C;
+  --cd-line: #2E323A;
+  --cd-t1: #F2F4F7;
+  --cd-t2: #8E96A3;
+  --cd-t3: #5D646F;
+  --cd-tree: #7FA08A;
+  --cd-warn: #D9A05B;
+  --cd-on-accent: #101114;
+}
+
+.cd-page {
+  min-height: 100vh;
+  background: var(--cd-bg);
+  color: var(--cd-t1);
+}
+
+.cd-card {
+  background: var(--cd-surface);
+  border-radius: 32rpx;
+  padding: 28rpx 32rpx;
+}
+
+.cd-cta {
+  width: 100%;
+  padding: 30rpx 0;
+  border-radius: 32rpx;
+  background: var(--cd-t1);
+  color: var(--cd-bg);
+  font-size: 30rpx;
+  font-weight: 500;
+  text-align: center;
+}
+.cd-cta-done {
+  background: transparent;
+  border: 1rpx solid var(--cd-line);
+  color: var(--cd-t2);
+  font-weight: 400;
+}
+
+.cd-ghost {
+  width: 100%;
+  padding: 28rpx 0;
+  border-radius: 32rpx;
+  border: 1rpx solid var(--cd-line);
+  color: var(--cd-t1);
+  font-size: 30rpx;
+  text-align: center;
+}
+
+.cd-t2 { color: var(--cd-t2); }
+.cd-t3 { color: var(--cd-t3); }
