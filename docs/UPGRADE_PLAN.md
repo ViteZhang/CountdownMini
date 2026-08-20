@@ -501,13 +501,23 @@ images/tab/letter.png          letter-actived.png
 ### 上线前必须做的事
 
 1. **给 `letter_vault` 配 `LETTER_SECRET_KEY`**（32 位以上随机串，
-   如 `openssl rand -base64 48`）。没配的话代码会静默退化成明文存储，
-   而隐私政策第五节已经白纸黑字写了「数据库里不存在明文」。有信件之后密钥无法轮换。
+   如 `openssl rand -base64 48`）。没配的话代码会静默退化成明文落库。
+   隐私政策里已经不再声称加密存储，所以这不再是「协议说了做不到」的问题，
+   但封存信是产品里最需要用户信任的东西，仍然建议配上。
+   注意：有信件之后密钥无法轮换。
 2. **重新部署 `user_profile`，并确认定时触发器已生效**（`config.json` 已带）。
    触发器没跑 = 注销承诺没兑现。
-3. **把 `utils/legal.js` 顶部的 `CONTACT` 换成真实可达的邮箱**。审核会验，用户也会用。
-4. 云开发控制台删除已废弃的云函数：`chat_send`、`chat_history`、`safety_check`、
+3. 云开发控制台删除已废弃的云函数：`chat_send`、`chat_history`、`safety_check`、
    `wallpaper_today`、`mood_curve`、`letter_generate`、`home_init`。
+
+### 关于「加密存储」这句话
+
+隐私政策初稿里写过「数据库里不存在明文」和「AES-256-GCM 加密存储」。
+后来删掉了：这两句只有在 `LETTER_SECRET_KEY` 配置好的前提下才成立，
+而代码在密钥缺失时是静默退化的 —— 协议不能押在一个可能没做的配置上。
+
+现在保留的是无论密钥配没配都成立的那条承诺：**到期前任何接口都不返回信的正文**，
+这条由服务端的日期判断保证，与加密无关。
 
 ### 免责
 
