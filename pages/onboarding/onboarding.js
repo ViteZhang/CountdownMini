@@ -2,6 +2,7 @@
 // 四屏配置流：考试类型 → 目标日期 → 起始日期 → 第一次看见那个数字
 const model = require('../../utils/model.js');
 const store = require('../../utils/store.js');
+const nav = require('../../utils/nav.js');
 const api = require('../../utils/api.js');
 
 Page({
@@ -173,7 +174,12 @@ Page({
   },
 
   prev() {
-    if (this.data.step > 1) this.go(this.data.step - 1);
+    if (this.data.step > 1) {
+      this.go(this.data.step - 1);
+      return;
+    }
+    // 编辑模式下第 1 屏就是入口，再往回就该退出这个页面
+    if (this.data.editMode) nav.back('/pages/home/home');
   },
 
   skip() {

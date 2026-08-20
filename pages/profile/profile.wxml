@@ -2,8 +2,11 @@
   <view class="status-bar" style="height: {{statusBarHeight}}px;"></view>
 
   <view class="topbar">
+    <view class="cd-back" bindtap="goBack">‹</view>
     <view class="title">我的</view>
-    <view class="settings-icon" bindtap="openSettings">⚙</view>
+    <!-- 右上角留空：微信胶囊按钮占据该位置，放任何控件都会被压住。
+         「设置」入口在下方菜单里。 -->
+    <view class="topbar-pad"></view>
   </view>
 
   <scroll-view scroll-y class="scroll">
