@@ -97,14 +97,8 @@ Page({
     wx.navigateTo({ url: '/pages/feedback/feedback' });
   },
 
-  openH5(e) {
-    const key = e.currentTarget.dataset.key;
-    const titles = { terms: '用户协议', privacy: '隐私政策', minor: '未成年人保护说明' };
-    wx.showModal({
-      title: titles[key],
-      content: '协议正文将在上线前由法务定稿。此处为占位。',
-      showCancel: false
-    });
+  openLegal(e) {
+    wx.navigateTo({ url: `/pages/legal/legal?key=${e.currentTarget.dataset.key}` });
   },
 
   goAbout() {

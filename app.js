@@ -11,15 +11,12 @@ App({
     nickname: '',
     avatarUrl: '',
 
-    // ---- 旧版保留字段：老页面（profile / wallpaper / chat / letter）仍在读 ----
+    // ---- 旧版保留字段：迁移老用户时仍在读 ----
     province: null,           // { code, name, examType }
     examYear: 2026,
     examDate: '2026-06-07T09:00:00+08:00',
-    moodToday: null,          // -2 ~ 2
     dreamSchool: null,
     grade: 'G3',
-    guestChatTurns: 0,
-    daysRemaining: 0,
 
     // ---- V2 新增 ----
     exam: null,               // 当前主考试
@@ -119,7 +116,6 @@ App({
     if (target) {
       this.globalData.examYear = target.getFullYear();
       this.globalData.examDate = `${exam.target_date}T09:00:00+08:00`;
-      this.globalData.daysRemaining = Math.max(model.diffDays(new Date(), target), 0);
     }
     this.persist();
   },

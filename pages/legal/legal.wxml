@@ -1,0 +1,14 @@
+<view class="page cd-page {{theme}}">
+  <view class="head">
+    <view class="doc-title">{{title}}</view>
+    <view class="doc-updated">更新于 {{updated}}</view>
+    <view class="doc-lead">{{lead}}</view>
+  </view>
+
+  <view wx:for="{{sections}}" wx:key="h" class="cd-card sec">
+    <view class="sec-h">{{item.h}}</view>
+    <view wx:for="{{item.p}}" wx:for-item="para" wx:key="*this" class="sec-p">{{para}}</view>
+  </view>
+
+  <view class="tail">以上条款如与法律法规冲突，以法律法规为准。</view>
+</view>

@@ -1,0 +1,27 @@
+.page {
+  min-height: 100vh;
+  background: var(--cd-bg);
+  padding: 32rpx 32rpx 96rpx;
+}
+.head { padding: 16rpx 8rpx 32rpx; }
+.doc-title { font-size: 40rpx; font-weight: 600; color: var(--cd-t1); }
+.doc-updated { font-size: 22rpx; color: var(--cd-t3); margin-top: 12rpx; }
+.doc-lead { font-size: 26rpx; color: var(--cd-t2); line-height: 1.7; margin-top: 24rpx; }
+
+.sec { margin-bottom: 16rpx; }
+.sec-h { font-size: 28rpx; font-weight: 600; color: var(--cd-t1); margin-bottom: 20rpx; }
+/* 每个段落各自成行 —— WXML 文本节点里的 \n 是两个字面字符，不会换行 */
+.sec-p {
+  font-size: 26rpx;
+  color: var(--cd-t2);
+  line-height: 1.8;
+  margin-bottom: 16rpx;
+}
+.sec-p:last-child { margin-bottom: 0; }
+
+.tail {
+  text-align: center;
+  font-size: 22rpx;
+  color: var(--cd-t3);
+  margin-top: 40rpx;
+}

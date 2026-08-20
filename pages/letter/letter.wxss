@@ -50,52 +50,8 @@
   50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* 信封 */
-.envelope-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.envelope {
-  width: 480rpx;
-  height: 320rpx;
-  position: relative;
-  animation: float 3s ease-in-out infinite;
-  cursor: pointer;
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12rpx); }
-}
-.envelope-flap {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 160rpx;
-  background: linear-gradient(180deg, #FFC857, #D4572A);
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-  filter: drop-shadow(0 8rpx 16rpx rgba(212,87,42,0.5));
-}
-.envelope-body {
-  position: absolute;
-  inset: 80rpx 0 0 0;
-  background: linear-gradient(135deg, #FFE7C2, #FFC857);
-  border-radius: 16rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 16rpx 64rpx rgba(255, 200, 87, 0.4);
-}
-.envelope-seal { font-size: 96rpx; }
-.envelope-hint {
-  position: absolute;
-  bottom: -80rpx;
-  left: 0; right: 0;
-  text-align: center;
-  font-size: 24rpx;
-  color: rgba(255,255,255,0.6);
-}
 
-/* 生成中 */
+/* 拆封中 */
 .loading-stage {
   display: flex;
   flex-direction: column;

@@ -1,20 +1,39 @@
 <view class="page cd-page {{theme}}">
   <view class="logo-wrap">
     <view class="logo">⏳</view>
-    <view class="name">高考倒计时 · 高三同行</view>
-    <view class="slogan">AI 陪你走过高三 300 天</view>
+    <view class="name">筑梦倒计时</view>
+    <view class="slogan">你已经走了这么远</view>
   </view>
+
   <view class="section">
     <view class="section-title">关于</view>
-    <view class="section-body">「高三同行」面向中国高三学生及部分高一、高二、复读生。我们不做心理咨询服务，也不做考试押题，只想让你在 300 多天的复习路上 多一个能在凌晨两点跟你说话的朋友。</view>
+    <view class="section-body">「筑梦倒计时」是一款备考倒计时与记录工具，面向高考、中考、考研、考公以及任何一场你在意的考试。</view>
+    <view class="section-body">它不只告诉你还剩多少天，也记下你已经走过了多少天 —— 因为后面这个数字，才是你真正攒下来的东西。</view>
+    <view class="section-body">由个人开发者独立开发和维护，免费，无广告，无内购。</view>
   </view>
+
   <view class="section">
     <view class="section-title">我们不做的事</view>
-    <view class="section-body">- 不做心理诊断、不做心理咨询服务\n- 不做考试押题、不承诺提分、不替学生做作业\n- 不收集敏感个人信息\n- 不向第三方共享你的对话内容</view>
+    <view class="section-body">· 不做心理诊断，也不提供心理咨询服务</view>
+    <view class="section-body">· 不押题、不承诺提分、不替你做作业</view>
+    <view class="section-body">· 不收集敏感个人信息，不要位置、通讯录和相册</view>
+    <view class="section-body">· 不做社交。你写下的一切只有你自己看得到</view>
   </view>
+
   <view class="section">
     <view class="section-title">如果你正在经历危机</view>
-    <view class="section-body">全国心理援助热线（24 小时）：<text class="tel" bindtap="callHotline">400-161-9995</text></view>
+    <view class="section-body">全国心理援助热线（24 小时）：<text class="tel" bindtap="callHotline">12356</text></view>
+    <view class="section-body">也可拨打 <text class="tel" bindtap="callBackup">400-161-9995</text></view>
+    <view class="section-body">这不是软弱，是求助。</view>
   </view>
+
+  <view class="links">
+    <text class="link" bindtap="openLegal" data-key="terms">用户协议</text>
+    <text class="dot">·</text>
+    <text class="link" bindtap="openLegal" data-key="privacy">隐私政策</text>
+    <text class="dot">·</text>
+    <text class="link" bindtap="openLegal" data-key="minor">未成年人保护</text>
+  </view>
+
   <view class="footer">v1.0.0 (MVP)</view>
 </view>

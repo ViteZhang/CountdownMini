@@ -439,15 +439,82 @@ images/tab/letter.png          letter-actived.png
 这是产品收敛的自然结果，不是缺陷。数据层面没有损失：
 `mood_checkins` 仍在（且被复用为打卡记录），`letters` 仍在，`users` 仍在。
 
-## 仍然存在的死代码（未处理）
+## 第八轮：清掉 AI 代写信、补齐三份协议、改名「筑梦倒计时」
 
-| 项 | 状态 |
-|---|---|
-| `cloudfunctions/home_init` + `api.homeInit` | 首页改用 `data_sync` 后已无调用方 |
-| `cloudfunctions/letter_generate` + `api.letterGenerate` / `letterList` | AI 代写信没有任何入口（没有页面再传 `action=generate`） |
-| `pages/letter` 里的 `generate()` / `regenerate()` / `openEnvelope()` | 同上，约 40 行 |
-| `api.updateProfile` / `api.letterOpen` | 无人使用（各页面直接调云函数或走别的方法） |
+### 1. AI 代写信下线（产品决策已定：不留）
 
-这些没有一并删，是因为 `letter_generate` 牵涉「要不要保留 AI 代写信这个功能」的产品决策，
-不只是清理死代码。旧的 AI 信件**读取**不受影响 —— `letter_vault` 的 `kind='ai'`
-分支直接读 `letters.content`，与 `letter_generate` 无关。
+删除 `cloudfunctions/letter_generate`、`cloudfunctions/home_init`，
+`api.js` 里的 `letterGenerate` / `letterList` / `homeInit` / `updateProfile` / `letterOpen`，
+以及 `pages/letter` 的 `generate()` / `regenerate()` / `openEnvelope()` 和整个信封态。
+
+读信页现在只有一个数据来源：`letter_vault`。落款按服务端返回的 `kind` 区分 ——
+自己写的信落「过去的你」，旧的 AI 信仍落「星语」。
+
+**旧 AI 信件的读取不受影响**：`letter_vault` 的 `kind='ai'` 分支直接读
+`letters.content`，与 `letter_generate` 无关。
+
+顺手清掉 `app.js` 里三个只写不读的字段（`guestChatTurns`、`moodToday`、`daysRemaining`）。
+
+### 2. 三份协议：从占位弹窗变成真正的页面
+
+原来「用户协议 / 隐私政策 / 未成年人保护说明」点开是一个写着
+「将在上线前由法务定稿」的 `showModal`。现在：
+
+- 正文放在 `utils/legal.js`，三份文档共用 `pages/legal/legal` 渲染。
+- 没有走外链 H5：个人主体没有可信的自有域名，业务域名还要备案，
+  内嵌进包里既不依赖外部服务，也不会因域名过期让协议变成 404。
+
+**协议是承诺，不是愿望** —— 所以写之前先对了一遍代码，发现两处对不上，
+一并修掉了（见下）。
+
+### 3. 补上协议里承诺、但代码没做的事
+
+| 承诺 | 原来的实现 | 现在 |
+|---|---|---|
+| 「7 天后彻底删除，无法恢复」 | `user_profile:delete` 只写了个 `deletePending` 标记，**没有任何东西会来读它** | 新增定时触发器（每天 04:00）执行 `purgeExpired()`，跨 6 个集合级联删除后再删 `users` 行 |
+| 「冷静期内登录可撤销」 | 无实现 | `login` 分支检测到 `deletePending` 即清除 |
+| 「导出你的数据」 | 只导出资料 + 三个计数 | 导出全部打卡、心里话、考试设置与信件清单 |
+
+删除覆盖的集合定义在 `USER_COLLECTIONS` 常量里，包含 `chat_messages`
+（旧版树洞对话）。**加新集合时必须同步加进去**，否则「注销即删除」会随功能增加悄悄失效。
+
+定时入口只认 `event.Type === 'Timer'`，不留客户端可调的别名 ——
+否则任何用户都能手动触发清理。要手工跑一次，在控制台用 `{"Type":"Timer"}` 测试调用。
+
+信件正文不进导出：解密密钥 `LETTER_SECRET_KEY` 只配在 `letter_vault` 一个函数上，
+`user_profile` 再放一份等于把钥匙复制到第二处，还会因两处配置不一致而静默失效。
+已开启的信在「信箱」里随时能读，这个口子不值得为它开。
+
+### 4. 去掉两个用不上的权限声明
+
+`app.json` 里声明了 `scope.userLocation` 和 `scope.writePhotosAlbum`，
+但全仓库没有任何代码调用 `getLocation` 或 `saveImageToPhotosAlbum`
+（壁纸页上一轮已删，省份是手动选的）。声明了却不用，既过不了隐私说明的一致性检查，
+也和隐私政策里「不收集位置」自相矛盾。已删除整个 `permission` 段。
+
+### 5. 改名
+
+「高考倒计时 · 高三同行」→ **筑梦倒计时**。关于页同步重写，
+并修掉原来 WXML 文本里写 `\n` 想换行的问题（WXML 文本节点里那是两个字面字符，
+`white-space: pre-wrap` 也救不了），改成每段一个 view。
+
+### 上线前必须做的事
+
+1. **给 `letter_vault` 配 `LETTER_SECRET_KEY`**（32 位以上随机串，
+   如 `openssl rand -base64 48`）。没配的话代码会静默退化成明文存储，
+   而隐私政策第五节已经白纸黑字写了「数据库里不存在明文」。有信件之后密钥无法轮换。
+2. **重新部署 `user_profile`，并确认定时触发器已生效**（`config.json` 已带）。
+   触发器没跑 = 注销承诺没兑现。
+3. **把 `utils/legal.js` 顶部的 `CONTACT` 换成真实可达的邮箱**。审核会验，用户也会用。
+4. 云开发控制台删除已废弃的云函数：`chat_send`、`chat_history`、`safety_check`、
+   `wallpaper_today`、`mood_curve`、`letter_generate`、`home_init`。
+
+### 免责
+
+三份协议是按本小程序的实际行为草拟的工程稿，不是法律意见。
+正式提交审核前建议找法务或律师过一遍，尤其是未成年人相关条款。
+
+## 已清空：曾经的死代码清单
+
+上一轮列出的四项（`home_init`、`letter_generate`、`pages/letter` 的生成分支、
+`api.updateProfile` / `api.letterOpen`）已在第八轮全部删除。

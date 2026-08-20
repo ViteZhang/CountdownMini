@@ -7,22 +7,11 @@
     <view class="placeholder"></view>
   </view>
 
-  <!-- 信封态 -->
-  <view wx:if="{{stage === 'envelope'}}" class="stage envelope-stage">
+  <!-- 拆封中 -->
+  <view wx:if="{{stage === 'loading'}}" class="stage loading-stage">
     <view class="stars">
       <view wx:for="{{stars}}" wx:key="*this" class="star" style="left: {{item.x}}%; top: {{item.y}}%; animation-delay: {{item.d}}s;"></view>
     </view>
-    <view class="envelope" bindtap="openEnvelope">
-      <view class="envelope-flap"></view>
-      <view class="envelope-body">
-        <text class="envelope-seal">💌</text>
-      </view>
-      <view class="envelope-hint">向上滑动信封 解封</view>
-    </view>
-  </view>
-
-  <!-- 生成中 -->
-  <view wx:elif="{{stage === 'loading'}}" class="stage loading-stage">
     <view class="loading-spinner"></view>
     <view class="loading-text">{{loadingText}}</view>
   </view>
@@ -33,7 +22,7 @@
       <view class="paper">
         <view class="paper-head">{{nickname || '亲爱的我'}}：</view>
         <view class="paper-body">{{contentShown}}</view>
-        <view wx:if="{{!streaming}}" class="paper-sign">—— 考上之后的你</view>
+        <view wx:if="{{!streaming}}" class="paper-sign">{{sign}}</view>
       </view>
     </scroll-view>
 
@@ -41,11 +30,6 @@
       <view class="letter-act" bindtap="saveCard">
         <view class="letter-act-icon">💾</view>
         <view class="letter-act-label">保存为卡片</view>
-      </view>
-      <view class="letter-act" bindtap="regenerate">
-        <view class="letter-act-icon">✨</view>
-        <view class="letter-act-label">重新写一封</view>
-        <view class="letter-act-sub">本周剩余 {{regenLeft}}</view>
       </view>
       <view class="letter-act" bindtap="back">
         <view class="letter-act-icon">✖</view>

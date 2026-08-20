@@ -1,6 +1,9 @@
 // pages/data-export/data-export.js
 const theme = require('../../utils/theme.js');
+const store = require('../../utils/store.js');
 const GRADE_LABEL = { G3: '高三', G2: '高二', G1: '高一', REPEAT: '复读' };
+// 年级标签只在高考语境下成立，中考/考研用户套上去会显示成「高一」。
+const GRADE_APPLIES = ['gaokao'];
 
 Page({
   data: {
@@ -31,7 +34,10 @@ Page({
       });
       const profile = (res.data && res.data.profile) || {};
       profile.provinceName = profile.province ? profile.province.name : '未设置';
-      profile.gradeLabel = GRADE_LABEL[profile.grade] || '高三';
+      const exam = store.getExam();
+      profile.gradeLabel = (exam && GRADE_APPLIES.indexOf(exam.type) >= 0)
+        ? (GRADE_LABEL[profile.grade] || '')
+        : '';
       this.setData({
         loading: false,
         data: { profile, stats: (res.data && res.data.stats) || {} }

@@ -20,6 +20,11 @@
 .slogan { font-size: 24rpx; color: var(--cd-t3); margin-top: 8rpx; }
 .section { background: var(--cd-surface); border-radius: 20rpx; padding: 32rpx; margin: 16rpx 0; }
 .section-title { font-size: 28rpx; font-weight: 600; color: var(--cd-accent); margin-bottom: 16rpx; }
-.section-body { font-size: 26rpx; color: var(--cd-t2); line-height: 1.7; white-space: pre-wrap; }
+.section-body { font-size: 26rpx; color: var(--cd-t2); line-height: 1.7; margin-bottom: 12rpx; }
+.section-body:last-child { margin-bottom: 0; }
 .tel { color: var(--cd-accent); font-weight: 600; text-decoration: underline; margin-left: 8rpx; }
 .footer { text-align: center; color: var(--cd-t3); font-size: 22rpx; margin-top: 48rpx; }
+
+.links { text-align: center; margin-top: 40rpx; font-size: 24rpx; }
+.link { color: var(--cd-accent); }
+.dot { color: var(--cd-t3); margin: 0 16rpx; }

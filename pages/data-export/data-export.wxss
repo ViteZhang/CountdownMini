@@ -22,3 +22,10 @@
 .k { font-size: 26rpx; color: var(--cd-t2); }
 .v { font-size: 26rpx; color: var(--cd-t1); }
 .export-btn { margin-top: 24rpx; }
+
+.note {
+  font-size: 22rpx;
+  color: var(--cd-t3);
+  line-height: 1.7;
+  padding: 24rpx 8rpx 0;
+}
