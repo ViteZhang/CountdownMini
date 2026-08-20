@@ -18,10 +18,9 @@ Page({
     gradeLabel: '高三',
     dreamSchool: '',
     days: 0,
-    stats: { days: 0, chats: 0, checkins: 0 },
     themeLabel: '跟随时间',
     hasLetter: false,
-    letterStatus: '设置梦想院校后 星语将为你写下一封来自未来的信'
+    letterStatus: '写一封给未来的自己'
   },
 
   onLoad() {
@@ -32,7 +31,6 @@ Page({
   },
 
   onShow() {
-
     theme.apply(this, true);
     this.refresh();
     this.setData({ themeLabel: THEME_LABEL[getApp().globalData.themeMode] || '跟随时间' });
@@ -66,15 +64,7 @@ Page({
       dreamSchool: g.dreamSchool || '',
       days: g.daysRemaining || dateUtil.diffCountdown().days
     });
-    this.loadStats();
     this.loadLetterStatus();
-  },
-
-  async loadStats() {
-    try {
-      const data = await api.call('user_profile', { action: 'stats' });
-      if (data && data.stats) this.setData({ stats: data.stats });
-    } catch (e) {}
   },
 
   async loadLetterStatus() {
@@ -121,11 +111,6 @@ Page({
   openSettings() {
     wx.navigateTo({ url: '/pages/settings/settings' });
   },
-
-  goMoodCurve() { wx.navigateTo({ url: '/pages/mood-curve/mood-curve' }); },
-  goHistory() { wx.navigateTo({ url: '/pages/history/history' }); },
-  goWallpapers() { wx.navigateTo({ url: '/pages/wallpaper-gallery/wallpaper-gallery' }); },
-  goAchievement() { wx.showToast({ title: '成就页 V1.1 上线', icon: 'none' }); },
 
   onShareAppMessage() {
     return {

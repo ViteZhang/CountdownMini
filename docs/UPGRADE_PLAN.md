@@ -306,3 +306,43 @@ images/tab/letter.png          letter-actived.png
 
 「我的」页顶栏右上角原本有一个 ⚙ —— 那正是微信胶囊按钮的位置，会被压住。
 已移除，该入口在页面下方的菜单里已经有了。右上角现在留空。
+
+---
+
+# 第五轮：日历填充态与「我的」瘦身
+
+## 打卡当天的日期数字消失
+
+**根因是 CSS 优先级，不是渲染问题。** 原来的顺序是：
+
+```css
+.day.has   { background: var(--cd-t1); color: var(--cd-bg); }
+.day.today { box-shadow: inset 0 0 0 1rpx var(--cd-t2); color: var(--cd-t1); }
+```
+
+两条选择器优先级相同（0,2,0），后写的赢。当天打卡后 `has` 与 `today` 同时命中，
+`color` 被 `.today` 覆盖回深色，于是深底深字 —— 数字还在，只是看不见了。
+
+改为把 `.today` 提到最前，并让填充态清掉描边：
+
+```css
+.day.today { box-shadow: inset 0 0 0 1rpx var(--cd-t2); color: var(--cd-t1); }
+.day.back  { background: var(--cd-line); color: var(--cd-t1); box-shadow: none; }
+.day.has   { background: var(--cd-t1);  color: var(--cd-bg); box-shadow: none; }
+```
+
+语义也更正确：`today` 只表示「今天但还没打卡」的描边提示，一旦打卡就让位给填充态。
+
+## 「我的」页瘦身
+
+暂时移除四块内容：**我的陪伴（统计卡）/ 我的心情曲线 / 我的历史对话 / 我保存的壁纸**。
+
+连带清理：`loadStats()` 及其云函数请求（统计卡没了就不必再发）、
+`goMoodCurve` / `goHistory` / `goWallpapers` / `goAchievement` 四个已无引用的方法。
+
+页面现在只剩：用户卡片 · 梦想院校 · 信箱 · 菜单（外观 / 考试与日期 / 设置）· 邀请。
+
+> 因为是「暂时」移除，`pages/wallpaper-gallery`、`pages/history`、`pages/mood-curve`
+> 三个页面仍保留在 `app.json` 中，`profile.wxss` 里的 `.stats-card` 样式也留着 ——
+> 想恢复时只需把 WXML 片段加回去，不用重写。
+> 这三个页面目前已无任何入口。

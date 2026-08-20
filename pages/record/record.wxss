@@ -56,9 +56,12 @@
   border-radius: 50%;
   position: relative;
 }
-.day.has { background: var(--cd-t1); color: var(--cd-bg); }
-.day.back { background: var(--cd-line); color: var(--cd-t1); }
+/* 顺序有讲究：today 只是「今天但还没打卡」的描边提示，
+   一旦打卡/补签，填充态必须盖过它 —— 否则同优先级下后写的
+   color 会赢，出现深底深字、数字看不见。 */
 .day.today { box-shadow: inset 0 0 0 1rpx var(--cd-t2); color: var(--cd-t1); }
+.day.back { background: var(--cd-line); color: var(--cd-t1); box-shadow: none; }
+.day.has { background: var(--cd-t1); color: var(--cd-bg); box-shadow: none; }
 .day-dot {
   position: absolute;
   top: 6rpx; right: 10rpx;
