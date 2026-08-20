@@ -12,8 +12,6 @@
       </view>
     </view>
     <view class="topbar-right">
-      <view class="topbar-icon" bindtap="openMoodCurve">📊</view>
-      <view class="topbar-icon" bindtap="openHistory">🕒</view>
     </view>
   </view>
 
