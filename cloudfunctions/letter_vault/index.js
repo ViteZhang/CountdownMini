@@ -23,15 +23,29 @@ function ok(data) { return { code: 0, data }; }
 function err(msg) { return { code: 1, msg }; }
 
 const pad = n => n < 10 ? '0' + n : '' + n;
-const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
-const todayKey = () => keyOf(new Date());
+
+/*
+ * 云函数容器的时区是 UTC，不是北京时间。
+ *
+ * 用 new Date().getDate() 判断「今天几号」，在北京时间 0 点到 8 点之间会算成昨天。
+ * 后果很具体：用户在 8 月 21 日凌晨点开一封 8 月 21 日到期的信，服务端认为今天还是
+ * 8 月 20 日，于是返回 still_sealed —— 明明日子到了却打不开。
+ *
+ * 所以所有「哪一天」的判断都先把绝对时间平移到东八区，再取 UTC 的年月日。
+ */
+const CST_OFFSET = 8 * 3600 * 1000;
+const fmtUTC = d => `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
+/** 任意时刻 → 它在北京时间属于哪一天 */
+const dayKey = d => fmtUTC(new Date(d.getTime() + CST_OFFSET));
+const todayKey = () => dayKey(new Date());
 const isDateKey = s => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
 
 function addDays(dateKey, n) {
   const m = dateKey.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  const d = new Date(+m[1], +m[2] - 1, +m[3]);
-  d.setDate(d.getDate() + n);
-  return keyOf(d);
+  // 用 Date.UTC 构造，避免再被容器时区拐一道
+  const d = new Date(Date.UTC(+m[1], +m[2] - 1, +m[3]));
+  d.setUTCDate(d.getUTCDate() + n);
+  return fmtUTC(d);
 }
 
 /* ---------------- 加密 ---------------- */
@@ -91,9 +105,9 @@ async function primaryTargetDate(openid) {
       .where({ _openid: openid, is_primary: true }).limit(1).get();
     if (r.data.length && r.data[0].target_date) return r.data[0].target_date;
   } catch (e) {}
-  const now = new Date();
-  let y = now.getFullYear();
-  if (now >= new Date(y, 5, 8)) y += 1;
+  const today = todayKey();
+  let y = +today.slice(0, 4);
+  if (today >= `${y}-06-08`) y += 1;
   return `${y}-06-07`;
 }
 

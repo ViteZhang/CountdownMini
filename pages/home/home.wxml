@@ -89,6 +89,15 @@
       <view class="hint-arrow">›</view>
     </view>
 
+    <!-- 推荐位：开关与文案都在云端配置，默认不展示 -->
+    <view wx:if="{{promo}}" class="cd-card promo" bindtap="openPromo">
+      <view class="promo-l">
+        <view class="promo-lab">{{promo.desc}}</view>
+        <view class="promo-title">{{promo.title}}</view>
+      </view>
+      <view class="promo-act">{{promo.actionText}} ›</view>
+    </view>
+
     <view class="bottom-pad"></view>
   </scroll-view>
 

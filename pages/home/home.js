@@ -3,6 +3,7 @@
 const model = require('../../utils/model.js');
 const store = require('../../utils/store.js');
 const api = require('../../utils/api.js');
+const promo = require('../../utils/promo.js');
 
 Page({
   data: {
@@ -38,7 +39,10 @@ Page({
     hintText: '',
     // 信件提示条：最近一封信 ≤30 天内开启，或已经可以开启（PRD 5.6）
     letterHint: null,
-    ready: false
+    ready: false,
+
+    // 底部推荐位。开关在云端，默认不展示
+    promo: null
   },
 
   onLoad() {
@@ -59,6 +63,9 @@ Page({
     this.render();
     this.pullCloud();
     this.pullLetters();
+    // 先用缓存渲染，避免推荐位在页面上突然弹出来，再异步对齐云端配置
+    this.setData({ promo: promo.cached() });
+    promo.refresh(p => this.setData({ promo: p }));
   },
 
   /** 从本地快照渲染整页 */
@@ -174,6 +181,10 @@ Page({
     this.render();
     if (note) api.noteSave(note).catch(() => {});
     wx.showToast({ title: '已记下', icon: 'none' });
+  },
+
+  openPromo() {
+    promo.open(this.data.promo);
   },
 
   /**
