@@ -224,7 +224,7 @@ Page({
   },
 
   back() {
-    wx.navigateBack();
+    nav.back('/pages/home/home');
   },
 
   onShareAppMessage() {

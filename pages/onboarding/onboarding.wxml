@@ -3,7 +3,7 @@
 
   <!-- 顶部：返回 / 步骤 / 跳过 -->
   <view class="nav" wx:if="{{step < 4}}">
-    <view class="back {{step > 1 ? '' : 'hide'}}" bindtap="prev">‹</view>
+    <view class="back {{step > 1 || editMode ? '' : 'hide'}}" bindtap="prev">‹</view>
     <view class="steps">
       <view class="dot {{step >= 1 ? 'on' : ''}}"></view>
       <view class="dot {{step >= 2 ? 'on' : ''}}"></view>

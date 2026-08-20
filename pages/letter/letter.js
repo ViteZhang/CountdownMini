@@ -1,5 +1,6 @@
 // pages/letter/letter.js
 const api = require('../../utils/api.js');
+const nav = require('../../utils/nav.js');
 
 Page({
   data: {
@@ -127,10 +128,10 @@ Page({
         ? '还没到开启的日子'
         : '没能打开这封信';
       wx.showToast({ title: msg, icon: 'none' });
-      setTimeout(() => wx.navigateBack(), 1200);
+      setTimeout(() => nav.back('/pages/letter-box/letter-box'), 1200);
     } catch (e) {
       wx.showToast({ title: '网络异常', icon: 'none' });
-      setTimeout(() => wx.navigateBack(), 1200);
+      setTimeout(() => nav.back('/pages/letter-box/letter-box'), 1200);
     }
   },
 
@@ -152,6 +153,6 @@ Page({
   },
 
   back() {
-    wx.navigateBack();
+    nav.back('/pages/letter-box/letter-box');
   }
 });

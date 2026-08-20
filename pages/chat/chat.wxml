@@ -4,6 +4,7 @@
   <!-- 顶部栏 -->
   <view class="topbar">
     <view class="topbar-left">
+      <view class="cd-back" bindtap="goBack">‹</view>
       <view class="ai-avatar"><text>星</text></view>
       <view class="ai-info">
         <view class="ai-name">星语 <view class="online-dot"></view></view>

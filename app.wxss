@@ -188,3 +188,15 @@ button::after {
 
 .cd-t2 { color: var(--cd-t2); }
 .cd-t3 { color: var(--cd-t3); }
+
+/* 自定义导航页的返回键。放在左侧，与微信胶囊（右上角）互不干扰。 */
+.cd-back {
+  width: 64rpx;
+  height: 64rpx;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-size: 48rpx;
+  line-height: 1;
+  color: var(--cd-t2);
+}

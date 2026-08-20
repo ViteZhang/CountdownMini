@@ -1,4 +1,5 @@
 // pages/chat/chat.js
+const nav = require('../../utils/nav.js');
 const dateUtil = require('../../utils/date.js');
 const api = require('../../utils/api.js');
 const { ensureLogin } = require('../../utils/auth.js');
@@ -35,6 +36,10 @@ let msgIdSeed = 0;
 function nextId() { msgIdSeed += 1; return 'm' + Date.now() + '_' + msgIdSeed; }
 
 Page({
+  goBack() {
+    nav.back('/pages/home/home');
+  },
+
   data: {
     statusBarHeight: 20,
     safeBottom: 24,

@@ -10,7 +10,8 @@
   align-items: center;
   justify-content: space-between;
 }
-.title { font-size: 36rpx; font-weight: 600; color: var(--cd-t1); }
+.title { font-size: 36rpx; font-weight: 600; color: var(--cd-t1); flex: 1; margin-left: 8rpx; }
+.topbar-pad { width: 180rpx; }
 .settings-icon {
   width: 64rpx;
   height: 64rpx;
