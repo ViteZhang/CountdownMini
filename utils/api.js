@@ -33,14 +33,6 @@ module.exports = {
   noteSave: (note) => call('data_sync', { action: 'push_note', note }),
   noteDelete: (id) => call('data_sync', { action: 'delete_note', id }),
   examSave: (exam) => call('data_sync', { action: 'save_exam', exam }),
-  wallpaperToday: (params) => call('wallpaper_today', params || {}),
-  chatWelcome: (params) => call('chat_welcome', params || {}),
-  chatSend: (content, session_id, emotion_tag) => call('chat_send', { content, session_id, emotion_tag }),
-  chatHistory: () => call('chat_history', { action: 'list' }),
-  chatSession: (session_id) => call('chat_history', { action: 'detail', session_id }),
-  chatFeedback: (message_id, feedback, reason) => call('chat_send', { action: 'feedback', message_id, feedback, reason }),
-  chatDelete: (message_id) => call('chat_send', { action: 'delete', message_id }),
-  moodCurve: (range) => call('mood_curve', { range }),
   letterGenerate: (regenerate) => call('letter_generate', { regenerate: !!regenerate }),
 
   // 未来信件「封存」：正文只在服务端，客户端本地永不保留封存中的内容

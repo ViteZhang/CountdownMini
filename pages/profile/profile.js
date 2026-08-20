@@ -23,8 +23,6 @@ Page({
     dreamSchool: '',
     examTitle: '考试',
     themeLabel: '跟随时间',
-    hasLetter: false,
-    letterStatus: '写一封给未来的自己'
   },
 
   onLoad() {
@@ -67,7 +65,6 @@ Page({
       metaText: this.buildMeta(g),
       examTitle: this.examTitle()
     });
-    this.loadLetterStatus();
   },
 
   examTitle() {
@@ -95,24 +92,6 @@ Page({
     return parts.filter(Boolean).join(' · ');
   },
 
-  async loadLetterStatus() {
-    try {
-      const data = await api.letterVaultList();
-      const list = (data && data.list) || [];
-      const ready = list.filter(l => l.status === 'ready').length;
-      const sealed = list.filter(l => l.status === 'sealed').length;
-      if (ready) {
-        this.setData({ hasLetter: true, letterStatus: `有 ${ready} 封可以开启了` });
-      } else if (sealed) {
-        this.setData({ hasLetter: false, letterStatus: `${sealed} 封封存中 · 点击查看` });
-      } else if (list.length) {
-        this.setData({ hasLetter: false, letterStatus: `已有 ${list.length} 封 · 点击查看` });
-      } else {
-        this.setData({ hasLetter: false, letterStatus: '写一封给未来的自己' });
-      }
-    } catch (e) {}
-  },
-
   editProfile() {
     if (!getApp().globalData.isLogin) {
       ensureLogin('登录后即可编辑你的资料').then(() => this.refresh()).catch(() => {});
@@ -125,11 +104,6 @@ Page({
     ensureLogin('登录后即可设置梦想院校').then(() => {
       wx.navigateTo({ url: '/pages/school/school' });
     }).catch(() => {});
-  },
-
-  openLetter() {
-    // 信箱里既有自己写的封存信，也有旧的星语代写信，不再卡梦想院校
-    wx.switchTab({ url: '/pages/letter-box/letter-box' });
   },
 
   goBack() {

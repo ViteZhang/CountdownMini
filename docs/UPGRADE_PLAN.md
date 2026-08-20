@@ -402,3 +402,52 @@ images/tab/letter.png          letter-actived.png
 「我的」页里的「未来的你信箱」卡片，与底部常驻的信箱 Tab 指向同一个页面。
 底部 Tab 一直可见，这个卡片是冗余的 —— 但它承担了状态提示
 （「有 N 封可以开启了」），去掉会损失一个提醒位。是否移除待定。
+
+---
+
+# 第七轮：砍掉树洞与壁纸
+
+## 删除范围
+
+| 类别 | 删除内容 |
+|---|---|
+| 页面 | `pages/chat`（树洞）、`pages/wallpaper`（每日壁纸） |
+| 云函数 | `chat_send`、`chat_history`、`safety_check`、`wallpaper_today`、`mood_curve` |
+| 工具 | `utils/safety-keywords.js`、`cloudfunctions/_shared/`（llm / prompts / safety） |
+| 接口 | `api.js` 中 `wallpaperToday` / `chatWelcome` / `chatSend` / `chatHistory` / `chatSession` / `chatFeedback` / `chatDelete` / `moodCurve` |
+| 「我的」页 | 信箱卡片（与底部信箱 Tab 重复） |
+
+`mood_curve` 云函数随上一轮删掉的心情曲线页一并清理。
+`cloudfunctions/_shared/` 没有任何云函数 `require` 它（代码当初被内联进各函数了），
+内容又全是树洞的 prompt 与安全词库，随树洞一起删。
+
+删除后可达性 **14 / 14**，无孤儿页，无悬空事件绑定，无残留引用。
+
+## 重要：代码删除 ≠ 线上删除
+
+这两件事必须手动做，否则线上仍在跑：
+
+1. **云开发控制台里删除已部署的云函数**：`chat_send`、`chat_history`、
+   `safety_check`、`wallpaper_today`、`mood_curve`。仓库删掉的只是源码。
+2. **`chat_messages` 集合仍存着老用户的树洞对话**。删代码不会删数据。
+   要清理需在控制台单独操作 —— 但注意这是用户产生的内容，
+   删之前先确认隐私政策与注销流程的承诺是怎么写的。
+
+## 老用户的感知
+
+升级后老用户会发现树洞、壁纸、心情曲线、历史对话都不见了。
+这是产品收敛的自然结果，不是缺陷。数据层面没有损失：
+`mood_checkins` 仍在（且被复用为打卡记录），`letters` 仍在，`users` 仍在。
+
+## 仍然存在的死代码（未处理）
+
+| 项 | 状态 |
+|---|---|
+| `cloudfunctions/home_init` + `api.homeInit` | 首页改用 `data_sync` 后已无调用方 |
+| `cloudfunctions/letter_generate` + `api.letterGenerate` / `letterList` | AI 代写信没有任何入口（没有页面再传 `action=generate`） |
+| `pages/letter` 里的 `generate()` / `regenerate()` / `openEnvelope()` | 同上，约 40 行 |
+| `api.updateProfile` / `api.letterOpen` | 无人使用（各页面直接调云函数或走别的方法） |
+
+这些没有一并删，是因为 `letter_generate` 牵涉「要不要保留 AI 代写信这个功能」的产品决策，
+不只是清理死代码。旧的 AI 信件**读取**不受影响 —— `letter_vault` 的 `kind='ai'`
+分支直接读 `letters.content`，与 `letter_generate` 无关。

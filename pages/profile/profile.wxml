@@ -34,15 +34,6 @@
     </view>
 
 
-    <!-- 未来的你信箱 -->
-    <view class="card letter-card {{hasLetter ? 'letter-ready' : ''}}" bindtap="openLetter">
-      <view class="letter-icon">💌</view>
-      <view class="letter-body">
-        <view class="letter-title">未来的你信箱</view>
-        <view class="letter-sub">{{letterStatus}}</view>
-      </view>
-      <view class="card-arrow">›</view>
-    </view>
 
     <!-- 其他入口 -->
     <view class="card menu-card">
