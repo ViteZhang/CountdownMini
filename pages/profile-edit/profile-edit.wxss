@@ -1,11 +1,11 @@
 .page {
   min-height: 100vh;
-  background: #FFF8EC;
+  background: var(--cd-bg);
   padding: 32rpx;
 }
 .first-tip {
-  background: #FFF1D6;
-  color: #6B2D0F;
+  background: var(--cd-surface2);
+  color: var(--cd-surface2);
   padding: 20rpx 24rpx;
   border-radius: 16rpx;
   font-size: 26rpx;
@@ -23,16 +23,16 @@
   display: block;
 }
 .avatar-placeholder {
-  background: #FFF1D6;
-  color: #D4572A;
+  background: var(--cd-surface2);
+  color: var(--cd-accent);
   font-size: 56rpx;
   line-height: 160rpx;
   text-align: center;
 }
-.avatar-hint { font-size: 22rpx; color: #888; margin-top: 12rpx; }
+.avatar-hint { font-size: 22rpx; color: var(--cd-t3); margin-top: 12rpx; }
 
 .form {
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 20rpx;
   margin: 24rpx 0;
   overflow: hidden;
@@ -41,15 +41,15 @@
   display: flex;
   align-items: center;
   padding: 28rpx 32rpx;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid var(--cd-surface2);
 }
 .form-row:last-child { border-bottom: none; }
-.form-label { width: 160rpx; font-size: 28rpx; color: #555; }
+.form-label { width: 160rpx; font-size: 28rpx; color: var(--cd-t2); }
 .form-input {
   flex: 1;
   font-size: 28rpx;
-  color: #1A1A1A;
+  color: var(--cd-t1);
   text-align: right;
 }
-.form-value { flex: 1; text-align: right; font-size: 28rpx; color: #1A1A1A; }
+.form-value { flex: 1; text-align: right; font-size: 28rpx; color: var(--cd-t1); }
 .save-btn { margin-top: 32rpx; }

@@ -127,6 +127,8 @@ button::after {
   --cd-t3: #9A9A94;
   --cd-tree: #5E8570;
   --cd-warn: #A9722C;
+  --cd-danger: #A8483C;
+  --cd-accent: #5E8570;
   --cd-on-accent: #FAFAF8;
 }
 
@@ -140,6 +142,8 @@ button::after {
   --cd-t3: #5D646F;
   --cd-tree: #7FA08A;
   --cd-warn: #D9A05B;
+  --cd-danger: #C97064;
+  --cd-accent: #7FA08A;
   --cd-on-accent: #101114;
 }
 

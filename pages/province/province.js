@@ -1,4 +1,5 @@
 // pages/province/province.js
+const theme = require('../../utils/theme.js');
 const { provinces, examTypeLabel, groupByPinyin } = require('../../utils/province.js');
 
 Page({
@@ -12,6 +13,11 @@ Page({
     examTypeLabel,
     scrollTo: ''
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad() {
     const hot = provinces.filter(p => p.hot);

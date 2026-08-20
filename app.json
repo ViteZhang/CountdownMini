@@ -28,8 +28,8 @@
     "backgroundColor": "#101114"
   },
   "tabBar": {
-    "color": "#5D646F",
-    "selectedColor": "#F2F4F7",
+    "color": "#7A828C",
+    "selectedColor": "#6E9480",
     "backgroundColor": "#101114",
     "borderStyle": "black",
     "list": [
@@ -42,8 +42,14 @@
       {
         "pagePath": "pages/record/record",
         "text": "记录",
-        "iconPath": "images/tab/chat.png",
-        "selectedIconPath": "images/tab/chat-actived.png"
+        "iconPath": "images/tab/record.png",
+        "selectedIconPath": "images/tab/record-actived.png"
+      },
+      {
+        "pagePath": "pages/letter-box/letter-box",
+        "text": "信箱",
+        "iconPath": "images/tab/letter.png",
+        "selectedIconPath": "images/tab/letter-actived.png"
       }
     ]
   },

@@ -1,4 +1,5 @@
 // pages/school/school.js
+const theme = require('../../utils/theme.js');
 const { SCHOOLS } = require('../../utils/schools.js');
 const api = require('../../utils/api.js');
 
@@ -21,6 +22,11 @@ Page({
     filtered: [],
     inLibrary: false
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad() {
     const g = getApp().globalData;

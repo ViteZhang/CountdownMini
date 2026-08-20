@@ -1,4 +1,4 @@
-<view class="page">
+<view class="page cd-page {{theme}}">
   <view class="logo-wrap">
     <view class="logo">⏳</view>
     <view class="name">高考倒计时 · 高三同行</view>

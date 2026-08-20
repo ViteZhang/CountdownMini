@@ -1,4 +1,5 @@
 // pages/settings/settings.js
+const theme = require('../../utils/theme.js');
 Page({
   data: {
     daily: true,
@@ -6,6 +7,11 @@ Page({
     milestone: true,
     isLogin: false
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad() {
     const cfg = wx.getStorageSync('settings') || {};

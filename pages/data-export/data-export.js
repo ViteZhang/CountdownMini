@@ -1,4 +1,5 @@
 // pages/data-export/data-export.js
+const theme = require('../../utils/theme.js');
 const GRADE_LABEL = { G3: '高三', G2: '高二', G1: '高一', REPEAT: '复读' };
 
 Page({
@@ -7,6 +8,11 @@ Page({
     loading: true,
     data: { profile: {}, stats: {} }
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad(options) {
     this.setData({ mode: options.mode || 'view' });

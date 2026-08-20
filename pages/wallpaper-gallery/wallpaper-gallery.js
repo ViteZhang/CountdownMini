@@ -1,4 +1,5 @@
 // pages/wallpaper-gallery/wallpaper-gallery.js
+const theme = require('../../utils/theme.js');
 const api = require('../../utils/api.js');
 
 Page({
@@ -6,7 +7,8 @@ Page({
     loading: true,
     list: []
   },
-  onShow() { this.load(); },
+  onShow() {
+    theme.apply(this, false); this.load(); },
   async load() {
     try {
       const data = await api.call('wallpaper_today', { action: 'list' });

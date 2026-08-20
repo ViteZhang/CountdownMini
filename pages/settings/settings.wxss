@@ -1,18 +1,18 @@
 .page {
   min-height: 100vh;
-  background: #FFF8EC;
+  background: var(--cd-bg);
   padding: 16rpx 32rpx 64rpx;
 }
 
 .group {
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 20rpx;
   margin: 24rpx 0;
   overflow: hidden;
 }
 .group-title {
   font-size: 24rpx;
-  color: #888;
+  color: var(--cd-t3);
   padding: 16rpx 32rpx 8rpx;
 }
 
@@ -21,21 +21,21 @@
   align-items: center;
   justify-content: space-between;
   padding: 28rpx 32rpx;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid var(--cd-surface2);
 }
 .row:last-child { border-bottom: none; }
-.row-label { font-size: 28rpx; color: #1A1A1A; }
-.row-value { font-size: 26rpx; color: #888; }
+.row-label { font-size: 28rpx; color: var(--cd-t1); }
+.row-value { font-size: 26rpx; color: var(--cd-t3); }
 .caret { margin-left: 4rpx; }
 .row-switch { transform: scale(0.85); }
-.row-danger .row-label { color: #C92A2A; }
+.row-danger .row-label { color: var(--cd-danger); }
 
 .logout-btn {
   margin-top: 24rpx;
-  background: #FFFFFF;
+  background: var(--cd-surface);
   text-align: center;
   padding: 28rpx;
   font-size: 28rpx;
-  color: #C92A2A;
+  color: var(--cd-danger);
   border-radius: 20rpx;
 }
