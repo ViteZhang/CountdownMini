@@ -8,16 +8,18 @@
       <view class="section-title">基础信息</view>
       <view class="kv"><text class="k">昵称</text><text class="v">{{data.profile.nickname}}</text></view>
       <view class="kv"><text class="k">省份</text><text class="v">{{data.profile.provinceName}}</text></view>
-      <view class="kv"><text class="k">年级</text><text class="v">{{data.profile.gradeLabel}}</text></view>
+      <view wx:if="{{data.profile.gradeLabel}}" class="kv"><text class="k">年级</text><text class="v">{{data.profile.gradeLabel}}</text></view>
       <view class="kv"><text class="k">梦想院校</text><text class="v">{{data.profile.dreamSchool}}</text></view>
     </view>
     <view class="section">
-      <view class="section-title">陪伴数据</view>
-      <view class="kv"><text class="k">陪伴天数</text><text class="v">{{data.stats.days}}</text></view>
-      <view class="kv"><text class="k">对话次数</text><text class="v">{{data.stats.chats}}</text></view>
+      <view class="section-title">记录</view>
+      <view class="kv"><text class="k">使用天数</text><text class="v">{{data.stats.days}}</text></view>
       <view class="kv"><text class="k">打卡天数</text><text class="v">{{data.stats.checkins}}</text></view>
+      <view class="kv"><text class="k">心里话</text><text class="v">{{data.stats.notes}}</text></view>
+      <view class="kv"><text class="k">信件</text><text class="v">{{data.stats.letters}}</text></view>
     </view>
 
+    <view wx:if="{{mode === 'export'}}" class="note">导出内容包含你的资料、考试设置、全部打卡与心里话，以及信件清单。还在封存中的信不含正文 —— 那是封存本身的意义。</view>
     <button wx:if="{{mode === 'export'}}" class="btn-primary export-btn" bindtap="exportJson">复制 JSON 到剪贴板</button>
   </view>
 </view>

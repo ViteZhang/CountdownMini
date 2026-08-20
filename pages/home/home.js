@@ -85,7 +85,6 @@ Page({
       ready: true
     });
 
-    getApp().globalData.daysRemaining = s.remaining;
     this.layoutRing(s.progress);
     this.layoutTree(s.stage.key);
   },

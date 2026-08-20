@@ -49,15 +49,15 @@
       <view class="row-label">意见反馈</view>
       <view class="row-value">›</view>
     </view>
-    <view class="row" bindtap="openH5" data-key="terms">
+    <view class="row" bindtap="openLegal" data-key="terms">
       <view class="row-label">用户协议</view>
       <view class="row-value">›</view>
     </view>
-    <view class="row" bindtap="openH5" data-key="privacy">
+    <view class="row" bindtap="openLegal" data-key="privacy">
       <view class="row-label">隐私政策</view>
       <view class="row-value">›</view>
     </view>
-    <view class="row" bindtap="openH5" data-key="minor">
+    <view class="row" bindtap="openLegal" data-key="minor">
       <view class="row-label">未成年人保护说明</view>
       <view class="row-value">›</view>
     </view>
