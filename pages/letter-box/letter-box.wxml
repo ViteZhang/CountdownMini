@@ -1,23 +1,41 @@
-<view class="page">
-  <view wx:if="{{loading}}" class="loading">
-    <view class="skeleton" style="height: 200rpx; margin: 16rpx 0;"></view>
-    <view class="skeleton" style="height: 200rpx; margin: 16rpx 0;"></view>
+<view class="cd-page lb {{theme}}">
+  <view style="height: {{statusBarHeight}}px;"></view>
+  <view class="nav"><view class="back" bindtap="back">‹</view></view>
+
+  <view class="head">
+    <view class="head-title">信箱</view>
+    <view class="head-sub">写给未来的自己</view>
   </view>
 
-  <view wx:elif="{{list.length === 0}}" class="empty">
-    <view class="empty-icon">💌</view>
-    <view class="empty-text">还没有来自未来的信</view>
-    <view class="btn-primary empty-btn" bindtap="generate">写一封</view>
-  </view>
+  <scroll-view class="scroll" scroll-y>
+    <view wx:if="{{loading}}" class="tip">正在打开信箱…</view>
 
-  <view wx:else>
-    <view class="letter-item" wx:for="{{list}}" wx:key="id" data-id="{{item.id}}" bindtap="open">
-      <view class="letter-head">
-        <view class="letter-school">{{item.dream_school}}</view>
-        <view class="letter-date">{{item.dateText}}</view>
+    <block wx:else>
+      <view wx:if="{{!hasAny}}" class="empty">
+        信箱还是空的。
+        <view class="empty-sub">写一封给几个月后的自己，到日子它会自己出现。</view>
       </view>
-      <view class="letter-preview">{{item.preview}}</view>
-    </view>
-    <view class="new-btn" bindtap="generate">+ 重新写一封</view>
-  </view>
+
+      <view
+        wx:for="{{list}}"
+        wx:key="id"
+        class="letter {{item.status === 'ready' ? 'ready' : ''}}"
+        data-id="{{item.id}}"
+        bindtap="open"
+      >
+        <view class="lt">
+          <text class="lt-lead">{{item.lead}}</text>
+          <text class="lt-sub">{{item.sub}}</text>
+        </view>
+        <view wx:if="{{item.status === 'sealed'}}" class="sealed">{{item.mask}}</view>
+        <view wx:elif="{{item.status === 'ready'}}" class="body">点击开启 →</view>
+        <view wx:else class="body">已经读过 · 点击重读</view>
+        <view class="del" data-id="{{item.id}}" catchtap="remove">删掉</view>
+      </view>
+    </block>
+
+    <view class="writebtn" bindtap="write">+ 写一封新的信</view>
+    <view class="foot-note">封存后无法查看，也无法修改。正文加密存在服务端，这台手机上不留副本。</view>
+    <view class="bottom-pad"></view>
+  </scroll-view>
 </view>

@@ -1,0 +1,46 @@
+<view class="cd-page lw {{theme}}">
+  <view style="height: {{statusBarHeight}}px;"></view>
+
+  <view class="nav"><view class="back" bindtap="back">‹</view></view>
+
+  <scroll-view class="scroll" scroll-y>
+    <view class="q">写给未来的自己</view>
+    <view class="qsub">封存之后看不到、也改不了。这是它值得被等待的原因。</view>
+
+    <textarea
+      class="paper"
+      value="{{content}}"
+      bindinput="onInput"
+      maxlength="1000"
+      placeholder="现在的你在想什么？写下来，等那天再看。"
+      placeholder-class="ph"
+      show-confirm-bar="{{false}}"
+      disable-default-padding="{{true}}"
+    ></textarea>
+    <view class="count">{{len}} / 1000</view>
+
+    <view class="sec">什么时候打开</view>
+    <view class="triggers">
+      <view
+        wx:for="{{triggers}}"
+        wx:key="key"
+        class="trig {{trigger === item.key ? 'on' : ''}} {{item.disabled ? 'off' : ''}}"
+        data-key="{{item.key}}"
+        bindtap="pickTrigger"
+      >{{item.name}}</view>
+    </view>
+
+    <picker wx:if="{{trigger === 'custom'}}" mode="date" value="{{customDate}}" start="{{minDate}}" bindchange="onCustomDate">
+      <view class="datepick">{{customDate}} · 点击修改</view>
+    </picker>
+
+    <view class="openat" wx:if="{{openAtText}}">{{openAtText}}</view>
+
+    <view class="note">正文会加密存在服务端，这台手机上不留副本。到期之前，任何地方都读不到它。</view>
+
+    <view class="foot">
+      <view class="cd-cta {{canSeal ? '' : 'disabled'}}" bindtap="seal">封存</view>
+    </view>
+    <view class="bottom-pad"></view>
+  </scroll-view>
+</view>

@@ -3,6 +3,8 @@ const dateUtil = require('../../utils/date.js');
 const api = require('../../utils/api.js');
 const { ensureLogin } = require('../../utils/auth.js');
 
+const THEME_LABEL = { auto: '跟随时间', light: '日间', dark: '夜间' };
+
 const GRADE_LABEL = { G3: '高三', G2: '高二', G1: '高一', REPEAT: '复读' };
 
 Page({
@@ -15,6 +17,7 @@ Page({
     dreamSchool: '',
     days: 0,
     stats: { days: 0, chats: 0, checkins: 0 },
+    themeLabel: '跟随时间',
     hasLetter: false,
     letterStatus: '设置梦想院校后 星语将为你写下一封来自未来的信'
   },
@@ -28,6 +31,25 @@ Page({
 
   onShow() {
     this.refresh();
+    this.setData({ themeLabel: THEME_LABEL[getApp().globalData.themeMode] || '跟随时间' });
+  },
+
+  /** 外观：默认「跟随时间」（白天浅色、天黑深色），也可固定为日间 / 夜间 */
+  pickTheme() {
+    const modes = ['auto', 'light', 'dark'];
+    wx.showActionSheet({
+      itemList: modes.map(m => THEME_LABEL[m]),
+      success: res => {
+        const m = modes[res.tapIndex];
+        getApp().applyTheme(m);
+        this.setData({ themeLabel: THEME_LABEL[m] });
+      },
+      fail: () => {}
+    });
+  },
+
+  goExamSetup() {
+    wx.navigateTo({ url: '/pages/onboarding/onboarding?edit=1' });
   },
 
   refresh() {
@@ -52,17 +74,19 @@ Page({
   },
 
   async loadLetterStatus() {
-    if (!getApp().globalData.dreamSchool) {
-      this.setData({ hasLetter: false, letterStatus: '设置梦想院校后 星语将为你写下一封来自未来的信' });
-      return;
-    }
     try {
-      const data = await api.letterList();
+      const data = await api.letterVaultList();
       const list = (data && data.list) || [];
-      if (list.length) {
-        this.setData({ hasLetter: true, letterStatus: '已有 ' + list.length + ' 封 · 点击查看' });
+      const ready = list.filter(l => l.status === 'ready').length;
+      const sealed = list.filter(l => l.status === 'sealed').length;
+      if (ready) {
+        this.setData({ hasLetter: true, letterStatus: `有 ${ready} 封可以开启了` });
+      } else if (sealed) {
+        this.setData({ hasLetter: false, letterStatus: `${sealed} 封封存中 · 点击查看` });
+      } else if (list.length) {
+        this.setData({ hasLetter: false, letterStatus: `已有 ${list.length} 封 · 点击查看` });
       } else {
-        this.setData({ hasLetter: false, letterStatus: '点击生成你的第一封信' });
+        this.setData({ hasLetter: false, letterStatus: '写一封给未来的自己' });
       }
     } catch (e) {}
   },
@@ -82,17 +106,8 @@ Page({
   },
 
   openLetter() {
-    if (!getApp().globalData.dreamSchool) {
-      wx.showToast({ title: '请先设置梦想院校', icon: 'none' });
-      return;
-    }
-    ensureLogin().then(() => {
-      if (this.data.hasLetter) {
-        wx.navigateTo({ url: '/pages/letter-box/letter-box' });
-      } else {
-        wx.navigateTo({ url: '/pages/letter/letter?action=generate' });
-      }
-    }).catch(() => {});
+    // 信箱里既有自己写的封存信，也有旧的星语代写信，不再卡梦想院校
+    wx.navigateTo({ url: '/pages/letter-box/letter-box' });
   },
 
   openSettings() {

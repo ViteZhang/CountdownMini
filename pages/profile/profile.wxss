@@ -143,3 +143,9 @@
 .invite-icon { margin-right: 12rpx; }
 
 .bottom-pad { height: 120rpx; }
+
+.menu-value {
+  font-size: 26rpx;
+  color: var(--text-tertiary);
+  margin-right: 8rpx;
+}
