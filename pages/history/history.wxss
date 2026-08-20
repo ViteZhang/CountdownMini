@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #FFF8EC;
+  background: var(--cd-bg);
   padding: 24rpx 32rpx;
 }
 
@@ -11,11 +11,11 @@
   text-align: center;
 }
 .empty-icon { font-size: 96rpx; margin-bottom: 16rpx; }
-.empty-text { font-size: 30rpx; color: #555; }
-.empty-sub { font-size: 24rpx; color: #888; margin-top: 8rpx; }
+.empty-text { font-size: 30rpx; color: var(--cd-t2); }
+.empty-sub { font-size: 24rpx; color: var(--cd-t3); margin-top: 8rpx; }
 
 .session {
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 20rpx;
   padding: 28rpx;
   margin-bottom: 16rpx;
@@ -27,11 +27,11 @@
   justify-content: space-between;
   margin-bottom: 12rpx;
 }
-.session-date { font-size: 30rpx; color: #1A1A1A; font-weight: 500; }
-.session-meta { font-size: 22rpx; color: #888; }
+.session-date { font-size: 30rpx; color: var(--cd-t1); font-weight: 500; }
+.session-meta { font-size: 22rpx; color: var(--cd-t3); }
 .session-preview {
   font-size: 26rpx;
-  color: #555;
+  color: var(--cd-t2);
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -42,8 +42,8 @@
   position: absolute;
   top: 16rpx;
   right: 16rpx;
-  background: #FFC857;
-  color: #6B2D0F;
+  background: var(--cd-accent);
+  color: var(--cd-surface2);
   font-size: 20rpx;
   padding: 4rpx 12rpx;
   border-radius: 8rpx;

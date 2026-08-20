@@ -1,4 +1,5 @@
 // pages/mood-curve/mood-curve.js
+const theme = require('../../utils/theme.js');
 const api = require('../../utils/api.js');
 
 Page({
@@ -14,6 +15,11 @@ Page({
     summary: '',
     lowSpan: false
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad() {
     this.load();

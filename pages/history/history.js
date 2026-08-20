@@ -1,4 +1,5 @@
 // pages/history/history.js
+const theme = require('../../utils/theme.js');
 const api = require('../../utils/api.js');
 
 Page({
@@ -6,6 +7,11 @@ Page({
     loading: true,
     sessions: []
   },
+
+  onShow() {
+    theme.apply(this, false);
+  },
+
 
   onLoad() {
     this.load();

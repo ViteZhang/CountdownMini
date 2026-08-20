@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #FFF8EC;
+  background: var(--cd-bg);
   display: flex;
   flex-direction: column;
 }
@@ -8,20 +8,20 @@
 .search-bar {
   margin: 24rpx 32rpx;
   padding: 16rpx 24rpx;
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 16rpx;
   display: flex;
   align-items: center;
   gap: 16rpx;
 }
-.search-icon { color: #888; font-size: 28rpx; }
+.search-icon { color: var(--cd-t3); font-size: 28rpx; }
 .search-input {
   flex: 1;
   font-size: 28rpx;
-  color: #1A1A1A;
+  color: var(--cd-t1);
 }
 .search-clear {
-  color: #888;
+  color: var(--cd-t3);
   font-size: 36rpx;
   width: 40rpx;
   height: 40rpx;
@@ -37,7 +37,7 @@
 .section { margin-bottom: 32rpx; }
 .section-title {
   font-size: 26rpx;
-  color: #888;
+  color: var(--cd-t3);
   margin: 24rpx 0 16rpx;
 }
 .hot-grid {
@@ -47,39 +47,39 @@
 }
 .hot-item {
   padding: 16rpx 32rpx;
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 24rpx;
   font-size: 28rpx;
-  color: #1A1A1A;
+  color: var(--cd-t1);
 }
 .hot-active {
-  background: #D4572A;
-  color: #fff;
+  background: var(--cd-accent);
+  color: var(--cd-surface);
 }
 
 .group { margin-bottom: 16rpx; }
 .group-letter {
   font-size: 26rpx;
-  color: #D4572A;
+  color: var(--cd-accent);
   font-weight: 600;
   margin: 24rpx 0 12rpx;
 }
 .row {
   padding: 28rpx 24rpx;
-  background: #FFFFFF;
+  background: var(--cd-surface);
   border-radius: 16rpx;
   margin-bottom: 12rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
-.row-name { font-size: 30rpx; color: #1A1A1A; flex: 1; }
-.row-mode { font-size: 22rpx; color: #888; margin-right: 16rpx; }
-.row-check { color: #D4572A; font-weight: 600; }
+.row-name { font-size: 30rpx; color: var(--cd-t1); flex: 1; }
+.row-mode { font-size: 22rpx; color: var(--cd-t3); margin-right: 16rpx; }
+.row-check { color: var(--cd-accent); font-weight: 600; }
 
 .empty {
   text-align: center;
-  color: #888;
+  color: var(--cd-t3);
   padding: 80rpx 0;
   font-size: 28rpx;
 }
@@ -101,5 +101,5 @@
   text-align: center;
   line-height: 36rpx;
   font-size: 22rpx;
-  color: #D4572A;
+  color: var(--cd-accent);
 }

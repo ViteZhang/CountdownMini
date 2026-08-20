@@ -1,7 +1,5 @@
 <view class="cd-page lb {{theme}}">
   <view style="height: {{statusBarHeight}}px;"></view>
-  <view class="nav"><view class="back" bindtap="back">‹</view></view>
-
   <view class="head">
     <view class="head-title">信箱</view>
     <view class="head-sub">写给未来的自己</view>

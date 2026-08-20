@@ -1,4 +1,5 @@
 // pages/profile-edit/profile-edit.js
+const theme = require('../../utils/theme.js');
 const GRADE_LABEL = { G3: '高三', G2: '高二', G1: '高一', REPEAT: '复读' };
 const GRADES = ['G3', 'G2', 'G1', 'REPEAT'];
 
@@ -22,6 +23,8 @@ Page({
   },
 
   onShow() {
+
+    theme.apply(this, false);
     const g = getApp().globalData;
     this.setData({
       nickname: this.data.nickname || g.nickname || '',

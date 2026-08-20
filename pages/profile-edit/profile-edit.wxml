@@ -1,4 +1,4 @@
-<view class="page">
+<view class="page cd-page {{theme}}">
   <view wx:if="{{firstTime}}" class="first-tip">
     填好头像和昵称 星语就知道该怎么称呼你了
   </view>

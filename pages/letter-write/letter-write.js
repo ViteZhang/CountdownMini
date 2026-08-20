@@ -118,7 +118,7 @@ Page({
   },
 
   back() {
-    wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/home/home' }) });
+    wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/letter-box/letter-box' }) });
   },
 
   async doSeal(openAt) {

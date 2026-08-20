@@ -1,7 +1,5 @@
 .lb { height: 100vh; display: flex; flex-direction: column; }
-.nav { height: 88rpx; display: flex; align-items: center; padding: 0 40rpx; }
-.back { font-size: 44rpx; color: var(--cd-t2); }
-.head { padding: 8rpx 52rpx 28rpx; }
+.head { padding: 32rpx 52rpx 28rpx; }
 .head-title { font-size: 34rpx; font-weight: 500; color: var(--cd-t1); }
 .head-sub { font-size: 24rpx; color: var(--cd-t2); margin-top: 8rpx; }
 .scroll { flex: 1; height: 0; padding: 0 52rpx; }

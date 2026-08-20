@@ -1,5 +1,9 @@
 // pages/feedback/feedback.js
+const theme = require('../../utils/theme.js');
 Page({
+  onShow() {
+    theme.apply(this, false);
+  },
   data: {
     cats: ['功能建议', 'AI 对话', 'BUG 反馈', 'UI 体验', '其他'],
     cat: '功能建议',

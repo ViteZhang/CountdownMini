@@ -1,4 +1,5 @@
 // pages/profile/profile.js
+const theme = require('../../utils/theme.js');
 const dateUtil = require('../../utils/date.js');
 const api = require('../../utils/api.js');
 const { ensureLogin } = require('../../utils/auth.js');
@@ -30,6 +31,8 @@ Page({
   },
 
   onShow() {
+
+    theme.apply(this, true);
     this.refresh();
     this.setData({ themeLabel: THEME_LABEL[getApp().globalData.themeMode] || '跟随时间' });
   },
@@ -107,7 +110,7 @@ Page({
 
   openLetter() {
     // 信箱里既有自己写的封存信，也有旧的星语代写信，不再卡梦想院校
-    wx.navigateTo({ url: '/pages/letter-box/letter-box' });
+    wx.switchTab({ url: '/pages/letter-box/letter-box' });
   },
 
   openSettings() {

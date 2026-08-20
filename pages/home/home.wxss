@@ -3,6 +3,7 @@
 
 /* ---- 顶部 ---- */
 .head {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -11,14 +12,86 @@
 .head-title { font-size: 32rpx; font-weight: 500; color: var(--cd-t1); letter-spacing: 1rpx; }
 .head-date { font-size: 24rpx; color: var(--cd-t2); margin-top: 8rpx; }
 
-/* ---- 进度环 ---- */
+/*
+ * 「我的」入口。微信胶囊按钮占据状态栏下方约 64rpx 高，
+ * 这里下移到 96rpx 让开它，纯 CSS 画的小人图标，跟随主题变色。
+ */
+.mine-btn {
+  position: absolute;
+  right: 44rpx;
+  top: 96rpx;
+  width: 56rpx;
+  height: 56rpx;
+}
+.mine-head {
+  position: absolute;
+  top: 6rpx;
+  left: 18rpx;
+  width: 20rpx;
+  height: 20rpx;
+  border: 2rpx solid var(--cd-t2);
+  border-radius: 50%;
+}
+.mine-body {
+  position: absolute;
+  bottom: 8rpx;
+  left: 8rpx;
+  width: 40rpx;
+  height: 20rpx;
+  border: 2rpx solid var(--cd-t2);
+  border-bottom: none;
+  border-radius: 22rpx 22rpx 0 0;
+}
+
+/* ---- 进度环（纯 CSS 双半圆） ----
+ * canvas 是原生组件，放在 scroll-view 里不跟随滚动，所以这里不用 canvas。
+ * 两个半圆窗口各自 overflow:hidden 裁剪一个「半环」，靠旋转露出对应弧段。
+ */
 .ringwrap {
   position: relative;
   width: 504rpx;
   height: 504rpx;
   margin: 16rpx auto 8rpx;
 }
-.ring-canvas { width: 504rpx; height: 504rpx; }
+.ring-track {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  box-sizing: border-box;
+  border: 18rpx solid var(--cd-line);
+  border-radius: 50%;
+}
+.ring-half {
+  position: absolute;
+  top: 0;
+  width: 252rpx;
+  height: 504rpx;
+  overflow: hidden;
+}
+.ring-r { right: 0; }
+.ring-l { left: 0; }
+.ring-arc {
+  position: absolute;
+  top: 0;
+  width: 504rpx;
+  height: 504rpx;
+  box-sizing: border-box;
+  border: 18rpx solid transparent;
+  border-radius: 50%;
+}
+/* 右窗内整圆左移半个身位，圆心贴窗口左缘；着色 top+right 得到 180° 跨度 */
+.arc-r {
+  left: -252rpx;
+  border-top-color: var(--cd-t1);
+  border-right-color: var(--cd-t1);
+}
+/* 左窗对称：着色 bottom+left */
+.arc-l {
+  left: 0;
+  border-bottom-color: var(--cd-t1);
+  border-left-color: var(--cd-t1);
+}
+
 .ring-inner {
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
@@ -39,14 +112,46 @@
 .ring-line { width: 184rpx; height: 1rpx; background: var(--cd-line); margin: 26rpx 0 22rpx; }
 .ring-passed { font-size: 26rpx; color: var(--cd-t2); }
 
-/* ---- 成长物 ---- */
+/* ---- 成长物（纯 CSS） ---- */
 .treecard {
   margin: 12rpx 44rpx 0;
   display: flex;
   align-items: center;
   gap: 26rpx;
 }
-.tree-canvas { width: 80rpx; height: 92rpx; flex-shrink: 0; }
+.tree {
+  position: relative;
+  width: 80rpx;
+  height: 96rpx;
+  flex-shrink: 0;
+}
+.tree-trunk {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 3rpx;
+  margin-left: -1.5rpx;
+  background: var(--cd-tree);
+  border-radius: 3rpx;
+}
+.tree-crown {
+  position: absolute;
+  box-sizing: border-box;
+  border: 3rpx solid var(--cd-tree);
+  border-radius: 50%;
+}
+.tree-crown.solid { background: var(--cd-tree); }
+.tree-seed {
+  position: absolute;
+  left: 50%;
+  bottom: 8rpx;
+  width: 16rpx;
+  height: 22rpx;
+  margin-left: -8rpx;
+  background: var(--cd-tree);
+  border-radius: 50%;
+}
+
 .tree-title { font-size: 26rpx; color: var(--cd-t1); }
 .tree-stage { font-size: 22rpx; color: var(--cd-t2); margin-top: 8rpx; }
 
@@ -81,17 +186,6 @@
 .hintbar.hint-ready .hint-txt { color: var(--cd-tree); }
 .hint-txt { font-size: 24rpx; color: var(--cd-t2); flex: 1; }
 .hint-arrow { font-size: 30rpx; color: var(--cd-t3); }
-
-.mine-entry {
-  margin: 20rpx 44rpx 0;
-  padding: 26rpx 30rpx;
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
-}
-.mine-txt { font-size: 26rpx; color: var(--cd-t2); }
-.mine-sub { flex: 1; font-size: 22rpx; color: var(--cd-t3); }
-.mine-arrow { font-size: 30rpx; color: var(--cd-t3); }
 
 .bottom-pad { height: 80rpx; }
 

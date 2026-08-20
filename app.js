@@ -98,9 +98,11 @@ App({
   applyTabBarTheme(theme) {
     const light = theme === 'light';
     try {
+      // 图标是 PNG，无法随主题重新着色，因此选用深浅底都读得清的两个颜色：
+      // 未选中中性灰 #7A828C，选中品牌绿 #6E9480 —— 文字与图标同色，一套图标够用。
       wx.setTabBarStyle({
-        color: light ? '#9A9A94' : '#5D646F',
-        selectedColor: light ? '#16181C' : '#F2F4F7',
+        color: '#7A828C',
+        selectedColor: '#6E9480',
         backgroundColor: light ? '#FAFAF8' : '#101114',
         borderStyle: light ? 'white' : 'black',
         fail: () => {}

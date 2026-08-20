@@ -20,6 +20,12 @@ Page({
     isExamDay: false,
     isAfterExam: false,
 
+    // 进度环（纯 CSS 双半圆），避免 canvas 原生组件在 scroll-view 中不跟随滚动
+    ringRightDeg: -135,
+    ringLeftDeg: -315,
+    // 成长树（纯 CSS）
+    tree: { trunk: 0, crowns: [], seed: false, bloom: false },
+
     totalCheckins: 0,
     totalNotes: 0,
     checkedToday: false,
@@ -80,8 +86,41 @@ Page({
     });
 
     getApp().globalData.daysRemaining = s.remaining;
-    this.drawRing(s.progress);
-    this.drawTree(s.stage.key);
+    this.layoutRing(s.progress);
+    this.layoutTree(s.stage.key);
+  },
+
+  /**
+   * 进度环。用两个半圆窗口各自裁剪一个「半环」元素，靠旋转露出对应弧段：
+   *   右窗覆盖 0–50%，左窗覆盖 50–100%，起点 12 点方向、顺时针。
+   * 推导：半环着色跨度 180°，右窗可见区间 [0°,180°]，
+   *   令着色区间右端 = 360p 即得 rightDeg = 360p − 135；左窗同理 leftDeg = 360p − 315。
+   */
+  layoutRing(progress) {
+    const p = Math.max(0, Math.min(progress, 1));
+    this.setData({
+      ringRightDeg: 360 * Math.min(p, 0.5) - 135,
+      ringLeftDeg: 360 * Math.max(p, 0.5) - 315
+    });
+  },
+
+  /** 成长树：形态只由 progress 映射出的阶段决定，与打卡无关 */
+  layoutTree(stageKey) {
+    const order = ['seed', 'sprout', 'branch', 'leaf', 'lush', 'bud', 'bloom'];
+    const lv = Math.max(order.indexOf(stageKey), 0);
+    const bloom = stageKey === 'bloom';
+
+    if (lv === 0) {
+      this.setData({ tree: { trunk: 12, crowns: [], seed: true, bloom: false } });
+      return;
+    }
+
+    const trunk = 16 + 60 * (lv / 6);          // rpx 百分比基准，见 wxss
+    const crowns = [{ x: 50, y: trunk + 6, r: 9 + lv * 2.6, solid: bloom }];
+    if (lv >= 2) crowns.push({ x: 26, y: trunk * 0.72, r: 5 + lv * 1.6, solid: bloom });
+    if (lv >= 3) crowns.push({ x: 74, y: trunk * 0.84, r: 6 + lv * 1.6, solid: bloom });
+
+    this.setData({ tree: { trunk, crowns, seed: false, bloom } });
   },
 
   buildHint(s) {
@@ -177,7 +216,7 @@ Page({
   },
 
   goLetters() {
-    wx.navigateTo({ url: '/pages/letter-box/letter-box' });
+    wx.switchTab({ url: '/pages/letter-box/letter-box' });
   },
 
   /* ---------------- 云端 ---------------- */
@@ -194,112 +233,6 @@ Page({
     } catch (e) {
       // 静默重试留给下次 onShow
     }
-  },
-
-  /* ---------------- 绘制 ---------------- */
-
-  drawRing(progress) {
-    const q = wx.createSelectorQuery().in(this);
-    q.select('#ringCanvas').fields({ node: true, size: true }).exec(res => {
-      if (!res || !res[0] || !res[0].node) return;
-      const canvas = res[0].node;
-      const ctx = canvas.getContext('2d');
-      let dpr = 2;
-      try { dpr = wx.getSystemInfoSync().pixelRatio || 2; } catch (e) {}
-      const w = res[0].width;
-      const h = res[0].height;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, w, h);
-
-      const cx = w / 2, cy = h / 2, r = w / 2 - 10;
-      const line = this.data.theme === 'cd-light' ? '#E3E2DD' : '#2E323A';
-      const fill = this.data.theme === 'cd-light' ? '#16181C' : '#F2F4F7';
-
-      ctx.lineWidth = 9;
-      ctx.strokeStyle = line;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.stroke();
-
-      if (progress > 0) {
-        ctx.strokeStyle = fill;
-        ctx.lineCap = 'round';
-        ctx.beginPath();
-        // 12 点方向起，顺时针
-        ctx.arc(cx, cy, r, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * progress);
-        ctx.stroke();
-      }
-    });
-  },
-
-  /** 成长树：只与 progress 映射出的阶段有关，与打卡无关 */
-  drawTree(stageKey) {
-    const q = wx.createSelectorQuery().in(this);
-    q.select('#treeCanvas').fields({ node: true, size: true }).exec(res => {
-      if (!res || !res[0] || !res[0].node) return;
-      const canvas = res[0].node;
-      const ctx = canvas.getContext('2d');
-      let dpr = 2;
-      try { dpr = wx.getSystemInfoSync().pixelRatio || 2; } catch (e) {}
-      const w = res[0].width, h = res[0].height;
-      canvas.width = w * dpr;
-      canvas.height = h * dpr;
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, w, h);
-
-      const c = this.data.theme === 'cd-light' ? '#5E8570' : '#7FA08A';
-      ctx.strokeStyle = c;
-      ctx.fillStyle = c;
-      ctx.lineCap = 'round';
-
-      const order = ['seed', 'sprout', 'branch', 'leaf', 'lush', 'bud', 'bloom'];
-      const lv = Math.max(order.indexOf(stageKey), 0);
-      const baseY = h - 3;
-      const cx = w / 2;
-
-      // 主干：随阶段变高
-      const trunkH = 6 + (h - 20) * (lv / 6);
-      ctx.lineWidth = 1.8;
-      ctx.beginPath();
-      ctx.moveTo(cx, baseY);
-      ctx.lineTo(cx, baseY - trunkH);
-      ctx.stroke();
-
-      if (lv === 0) {
-        // 种子
-        ctx.beginPath();
-        ctx.ellipse(cx, baseY - 4, 4, 5.5, 0, 0, Math.PI * 2);
-        ctx.fill();
-        return;
-      }
-
-      // 枝
-      if (lv >= 2) {
-        ctx.lineWidth = 1.4;
-        ctx.beginPath();
-        ctx.moveTo(cx, baseY - trunkH * 0.55);
-        ctx.lineTo(cx - 9, baseY - trunkH * 0.78);
-        ctx.moveTo(cx, baseY - trunkH * 0.72);
-        ctx.lineTo(cx + 9, baseY - trunkH * 0.92);
-        ctx.stroke();
-      }
-
-      // 冠：半径与数量随阶段增长；bloom 为实心
-      const crown = [
-        { x: cx, y: baseY - trunkH - 2, r: 3 + lv * 1.3 },
-        { x: cx - 10, y: baseY - trunkH * 0.82, r: lv >= 2 ? 2 + lv * 0.8 : 0 },
-        { x: cx + 10, y: baseY - trunkH * 0.95, r: lv >= 3 ? 2.5 + lv * 0.8 : 0 }
-      ];
-      ctx.lineWidth = 1.4;
-      crown.forEach(o => {
-        if (o.r <= 0) return;
-        ctx.beginPath();
-        ctx.arc(o.x, o.y, o.r, 0, Math.PI * 2);
-        if (stageKey === 'bloom') ctx.fill(); else ctx.stroke();
-      });
-    });
   },
 
   /* ---------------- 导航 ---------------- */

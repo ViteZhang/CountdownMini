@@ -117,7 +117,7 @@ Page({
     });
   },
 
-  back() {
-    wx.navigateBack({ fail: () => wx.switchTab({ url: '/pages/home/home' }) });
+  onShareAppMessage() {
+    return { title: '写一封信给未来的自己', path: '/pages/home/home' };
   }
 });
