@@ -42,5 +42,14 @@ module.exports = {
   chatDelete: (message_id) => call('chat_send', { action: 'delete', message_id }),
   moodCurve: (range) => call('mood_curve', { range }),
   letterGenerate: (regenerate) => call('letter_generate', { regenerate: !!regenerate }),
+
+  // 未来信件「封存」：正文只在服务端，客户端本地永不保留封存中的内容
+  letterSeal: (content, open_trigger, open_at) =>
+    call('letter_vault', { action: 'seal', content, open_trigger, open_at }),
+  letterVaultList: () => call('letter_vault', { action: 'list' }),
+  letterOpen: (id) => call('letter_vault', { action: 'open', id }),
+  letterDelete: (id) => call('letter_vault', { action: 'delete', id }),
+
+  // 旧的 AI 代写信保持不变
   letterList: () => call('letter_generate', { action: 'list' })
 };

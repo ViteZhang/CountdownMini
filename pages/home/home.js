@@ -30,6 +30,8 @@ Page({
     noteLen: 0,
 
     hintText: '',
+    // 信件提示条：最近一封信 ≤30 天内开启，或已经可以开启（PRD 5.6）
+    letterHint: null,
     ready: false
   },
 
@@ -47,9 +49,10 @@ Page({
 
   onShow() {
     if (!store.isConfigured()) return;
-    this.setData({ theme: getApp().globalData.theme });
+    this.setData({ theme: getApp().refreshTheme() });
     this.render();
     this.pullCloud();
+    this.pullLetters();
   },
 
   /** 从本地快照渲染整页 */
@@ -133,6 +136,48 @@ Page({
     this.render();
     if (note) api.noteSave(note).catch(() => {});
     wx.showToast({ title: '已记下', icon: 'none' });
+  },
+
+  /**
+   * 信件提示条。只拿元数据 —— 封存中的正文服务端根本不下发。
+   * 无网络时静默隐藏，不显示错误态。
+   */
+  async pullLetters() {
+    try {
+      const data = await api.letterVaultList();
+      const list = (data && data.list) || [];
+
+      const ready = list.filter(l => l.status === 'ready');
+      if (ready.length) {
+        this.setData({
+          letterHint: {
+            text: ready.length > 1
+              ? `有 ${ready.length} 封信可以开启了`
+              : '有一封信今天可以开启',
+            ready: true
+          }
+        });
+        return;
+      }
+
+      const sealed = list
+        .filter(l => l.status === 'sealed')
+        .sort((a, b) => a.days_left - b.days_left)[0];
+
+      if (sealed && sealed.days_left <= 30) {
+        this.setData({
+          letterHint: { text: `写给自己的信，${sealed.days_left} 天后开启`, ready: false }
+        });
+        return;
+      }
+      this.setData({ letterHint: null });
+    } catch (e) {
+      this.setData({ letterHint: null });
+    }
+  },
+
+  goLetters() {
+    wx.navigateTo({ url: '/pages/letter-box/letter-box' });
   },
 
   /* ---------------- 云端 ---------------- */
@@ -263,16 +308,8 @@ Page({
     wx.switchTab({ url: '/pages/record/record' });
   },
 
-  goSettings() {
-    wx.navigateTo({ url: '/pages/settings/settings' });
-  },
-
-  toggleTheme() {
-    const app = getApp();
-    const next = app.globalData.theme === 'cd-dark' ? 'light' : 'dark';
-    app.applyTheme(next);
-    this.setData({ theme: app.globalData.theme });
-    this.render();
+  goMine() {
+    wx.navigateTo({ url: '/pages/profile/profile' });
   },
 
   onShareAppMessage() {

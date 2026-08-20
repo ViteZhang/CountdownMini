@@ -80,6 +80,25 @@
         <text class="menu-label">我保存的壁纸</text>
         <text class="menu-arrow">›</text>
       </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="pickTheme">
+        <text class="menu-icon">◐</text>
+        <text class="menu-label">外观</text>
+        <text class="menu-value">{{themeLabel}}</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="goExamSetup">
+        <text class="menu-icon">⏳</text>
+        <text class="menu-label">考试与日期</text>
+        <text class="menu-arrow">›</text>
+      </view>
+      <view class="menu-divider"></view>
+      <view class="menu-item" bindtap="openSettings">
+        <text class="menu-icon">⚙</text>
+        <text class="menu-label">设置</text>
+        <text class="menu-arrow">›</text>
+      </view>
     </view>
 
     <!-- 邀请 -->

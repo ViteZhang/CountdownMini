@@ -33,6 +33,9 @@ Page({
 
     if (options.action === 'generate') {
       this.generate();
+    } else if (options.id && options.vault) {
+      // 封存信：正文只能由服务端在到期后下发
+      this.loadFromVault(options.id);
     } else if (options.id) {
       this.loadById(options.id);
     }
@@ -107,6 +110,28 @@ Page({
       }
     };
     step();
+  },
+
+  /** 从信件保险箱开启。未到期时服务端会拒绝，这里如实告诉用户还要等多久。 */
+  async loadFromVault(id) {
+    this.setData({ stage: 'loading', loadingText: '正在拆封...' });
+    try {
+      const res = await api.call('letter_vault', { action: 'open', id });
+      const content = res && res.content;
+      if (content) {
+        this.setData({ content, letterId: id });
+        this.enterReading();
+        return;
+      }
+      const msg = (res && res.msg) === 'still_sealed'
+        ? '还没到开启的日子'
+        : '没能打开这封信';
+      wx.showToast({ title: msg, icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 1200);
+    } catch (e) {
+      wx.showToast({ title: '网络异常', icon: 'none' });
+      setTimeout(() => wx.navigateBack(), 1200);
+    }
   },
 
   async loadById(id) {

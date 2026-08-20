@@ -38,7 +38,7 @@ Page({
   },
 
   onShow() {
-    this.setData({ theme: getApp().globalData.theme });
+    this.setData({ theme: getApp().refreshTheme() });
     this.refresh();
   },
 

@@ -11,6 +11,7 @@
     "pages/mood-curve/mood-curve",
     "pages/school/school",
     "pages/letter/letter",
+    "pages/letter-write/letter-write",
     "pages/letter-box/letter-box",
     "pages/wallpaper-gallery/wallpaper-gallery",
     "pages/profile-edit/profile-edit",
@@ -43,12 +44,6 @@
         "text": "记录",
         "iconPath": "images/tab/chat.png",
         "selectedIconPath": "images/tab/chat-actived.png"
-      },
-      {
-        "pagePath": "pages/profile/profile",
-        "text": "我的",
-        "iconPath": "images/tab/mine.png",
-        "selectedIconPath": "images/tab/mine-actived.png"
       }
     ]
   },

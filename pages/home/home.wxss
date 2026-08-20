@@ -10,8 +10,6 @@
 }
 .head-title { font-size: 32rpx; font-weight: 500; color: var(--cd-t1); letter-spacing: 1rpx; }
 .head-date { font-size: 24rpx; color: var(--cd-t2); margin-top: 8rpx; }
-.head-r { display: flex; gap: 28rpx; }
-.head-btn { font-size: 34rpx; color: var(--cd-t2); padding: 8rpx; }
 
 /* ---- 进度环 ---- */
 .ringwrap {
@@ -79,8 +77,21 @@
   align-items: center;
   justify-content: space-between;
 }
+.hintbar.hint-ready { border-color: var(--cd-tree); }
+.hintbar.hint-ready .hint-txt { color: var(--cd-tree); }
 .hint-txt { font-size: 24rpx; color: var(--cd-t2); flex: 1; }
 .hint-arrow { font-size: 30rpx; color: var(--cd-t3); }
+
+.mine-entry {
+  margin: 20rpx 44rpx 0;
+  padding: 26rpx 30rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+.mine-txt { font-size: 26rpx; color: var(--cd-t2); }
+.mine-sub { flex: 1; font-size: 22rpx; color: var(--cd-t3); }
+.mine-arrow { font-size: 30rpx; color: var(--cd-t3); }
 
 .bottom-pad { height: 80rpx; }
 

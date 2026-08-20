@@ -61,22 +61,36 @@ App({
     this.refreshExamBase();
   },
 
-  /** 主题：auto 跟随系统 */
+  /**
+   * 主题。默认 auto：按当地时间自动切换，白天浅色、天黑深色。
+   * 6:00–17:59 → light，18:00–5:59 → dark。
+   * 用户在「我的 · 外观」里手动选了 light / dark 后，就固定不再随时间变。
+   */
+  autoThemeByClock(now) {
+    const h = (now || new Date()).getHours();
+    return (h >= 6 && h < 18) ? 'light' : 'dark';
+  },
+
   applyTheme(mode) {
     let m = mode || 'auto';
     let theme = m;
-    if (m === 'auto') {
-      let sysDark = true;
-      try {
-        const info = wx.getSystemInfoSync();
-        if (info && info.theme) sysDark = info.theme === 'dark';
-      } catch (e) {}
-      theme = sysDark ? 'dark' : 'light';
-    }
+    if (m === 'auto') theme = this.autoThemeByClock();
     this.globalData.themeMode = m;
     this.globalData.theme = theme === 'light' ? 'cd-light' : 'cd-dark';
     store.setTheme(m);
     this.applyTabBarTheme(theme);
+    return this.globalData.theme;
+  },
+
+  /**
+   * 页面 onShow 调用：auto 模式下按当前时间复算主题。
+   * 返回最终的 theme class，页面直接 setData 即可。
+   */
+  refreshTheme() {
+    if (this.globalData.themeMode === 'auto') {
+      const want = this.autoThemeByClock() === 'light' ? 'cd-light' : 'cd-dark';
+      if (want !== this.globalData.theme) this.applyTheme('auto');
+    }
     return this.globalData.theme;
   },
 

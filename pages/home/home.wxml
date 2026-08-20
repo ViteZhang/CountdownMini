@@ -8,10 +8,6 @@
         <view class="head-title">{{title}}</view>
         <view class="head-date">{{targetText}}</view>
       </view>
-      <view class="head-r">
-        <view class="head-btn" bindtap="toggleTheme">◐</view>
-        <view class="head-btn" bindtap="goSettings">⚙</view>
-      </view>
     </view>
 
     <!-- 进度环：填充度 = 已走过比例 -->
@@ -59,10 +55,23 @@
       <view wx:if="{{checkedToday}}" class="cta-sub">想再补一句心里话，点上面就好</view>
     </view>
 
+    <!-- 信件提示条 -->
+    <view wx:if="{{letterHint}}" class="hintbar {{letterHint.ready ? 'hint-ready' : ''}}" bindtap="goLetters">
+      <view class="hint-txt">{{letterHint.text}}</view>
+      <view class="hint-arrow">›</view>
+    </view>
+
     <!-- 提示条 -->
     <view class="hintbar" bindtap="goRecord">
       <view class="hint-txt">{{hintText}}</view>
       <view class="hint-arrow">›</view>
+    </view>
+
+    <!-- 「我的」收起为一个安静的入口：顶部右上角会被微信胶囊挡住，放这里 -->
+    <view class="mine-entry" bindtap="goMine">
+      <view class="mine-txt">我的</view>
+      <view class="mine-sub">院校 · 信箱 · 外观 · 设置</view>
+      <view class="mine-arrow">›</view>
     </view>
 
     <view class="bottom-pad"></view>

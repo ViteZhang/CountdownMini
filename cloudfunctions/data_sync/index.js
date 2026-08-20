@@ -108,7 +108,22 @@ exports.main = async (event) => {
           data: Object.assign({ _openid: OPENID, createdAt: new Date() }, fields)
         });
       }
-      return ok({ saved: true });
+
+      // 考期变了，预设节点信件（d100 / d50 / 考前一晚 / 出分日）的开启日期要跟着重算；
+      // 自定义日期的信不动。见 PRD 5.6 边界情况。
+      let rescheduled = 0;
+      if (e.target_date) {
+        try {
+          const r = await cloud.callFunction({
+            name: 'letter_vault',
+            data: { action: 'reschedule', target_date: e.target_date }
+          });
+          rescheduled = (r.result && r.result.data && r.result.data.updated) || 0;
+        } catch (err2) {
+          console.error('[data_sync reschedule]', err2);
+        }
+      }
+      return ok({ saved: true, rescheduled });
     }
 
     if (action === 'push_note') {
