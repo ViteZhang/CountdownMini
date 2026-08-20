@@ -1,7 +1,8 @@
 // pages/profile/profile.js
 const theme = require('../../utils/theme.js');
 const nav = require('../../utils/nav.js');
-const dateUtil = require('../../utils/date.js');
+const model = require('../../utils/model.js');
+const store = require('../../utils/store.js');
 const api = require('../../utils/api.js');
 const { ensureLogin } = require('../../utils/auth.js');
 
@@ -9,15 +10,18 @@ const THEME_LABEL = { auto: '跟随时间', light: '日间', dark: '夜间' };
 
 const GRADE_LABEL = { G3: '高三', G2: '高二', G1: '高一', REPEAT: '复读' };
 
+// GRADE_LABEL 是高考语境的（高一/高二/高三），中考用户套上去会显示成「高一」，是错的。
+// 在 profile-edit 里补出初中年级之前，年级只对高考展示。
+const GRADE_APPLIES = ['gaokao'];
+
 Page({
   data: {
     statusBarHeight: 20,
     nickname: '',
     avatarUrl: '',
-    provinceName: '未设置',
-    gradeLabel: '高三',
+    metaText: '',
     dreamSchool: '',
-    days: 0,
+    examTitle: '考试',
     themeLabel: '跟随时间',
     hasLetter: false,
     letterStatus: '写一封给未来的自己'
@@ -59,12 +63,36 @@ Page({
     this.setData({
       nickname: g.nickname || '',
       avatarUrl: g.avatarUrl || '',
-      provinceName: g.province ? g.province.name : '未设置',
-      gradeLabel: GRADE_LABEL[g.grade] || '高三',
       dreamSchool: g.dreamSchool || '',
-      days: g.daysRemaining || dateUtil.diffCountdown().days
+      metaText: this.buildMeta(g),
+      examTitle: this.examTitle()
     });
     this.loadLetterStatus();
+  },
+
+  examTitle() {
+    const exam = store.getExam();
+    return (exam && exam.title) || '考试';
+  },
+
+  /**
+   * 资料行。天数与考试名都取自当前主考试 —— 不能写死「距高考 X 天」，
+   * 用户可能准备的是中考 / 考研 / 考公 / 自定义考试。
+   */
+  buildMeta(g) {
+    const exam = store.getExam();
+    const parts = [];
+    if (g.province && g.province.name) parts.push(g.province.name);
+    if (exam && GRADE_APPLIES.indexOf(exam.type) >= 0 && g.grade) {
+      parts.push(GRADE_LABEL[g.grade] || '');
+    }
+    if (exam) {
+      const s = model.computeExam(exam);
+      if (s.isExamDay) parts.push(`${exam.title}就是今天`);
+      else if (s.isAfterExam) parts.push(`${exam.title}已结束`);
+      else parts.push(`距${exam.title} ${s.remaining} 天`);
+    }
+    return parts.filter(Boolean).join(' · ');
   },
 
   async loadLetterStatus() {
@@ -114,7 +142,7 @@ Page({
 
   onShareAppMessage() {
     return {
-      title: `${this.data.nickname || '我'}正在用「高三同行」 你要不要也来？`,
+      title: `我在记录距${this.data.examTitle}还剩多少天，也记下已经走过多少天`,
       path: '/pages/home/home'
     };
   }

@@ -353,13 +353,5 @@ Page({
     this.setData({ showSafetyBar: false });
   },
 
-  onSystemTap() {},
-
-  openHistory() {
-    wx.navigateTo({ url: '/pages/history/history' });
-  },
-
-  openMoodCurve() {
-    wx.navigateTo({ url: '/pages/mood-curve/mood-curve' });
-  }
+  onSystemTap() {}
 });

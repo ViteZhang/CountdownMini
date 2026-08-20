@@ -18,7 +18,7 @@
       </view>
       <view class="profile-info">
         <view class="profile-name">{{nickname || '点击登录'}}</view>
-        <view class="profile-meta">{{provinceName}} · {{gradeLabel}} · 距高考 {{days}} 天</view>
+        <view class="profile-meta">{{metaText}}</view>
       </view>
       <view class="profile-arrow">›</view>
     </view>
@@ -30,7 +30,7 @@
         <view class="card-arrow">›</view>
       </view>
       <view wx:if="{{dreamSchool}}" class="school-name">{{dreamSchool}}</view>
-      <view wx:else class="school-empty">点击设置 让星语为你写一封来自未来的信</view>
+      <view wx:else class="school-empty">点击设置你想去的学校</view>
     </view>
 
 
