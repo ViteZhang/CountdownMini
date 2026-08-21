@@ -18,16 +18,16 @@
   ],
   "window": {
     "backgroundTextStyle": "dark",
-    "navigationBarBackgroundColor": "#101114",
+    "navigationBarBackgroundColor": "#FAFAF8",
     "navigationBarTitleText": "倒计时",
-    "navigationBarTextStyle": "white",
-    "backgroundColor": "#101114"
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#FAFAF8"
   },
   "tabBar": {
     "color": "#7A828C",
     "selectedColor": "#6E9480",
-    "backgroundColor": "#101114",
-    "borderStyle": "black",
+    "backgroundColor": "#FAFAF8",
+    "borderStyle": "white",
     "list": [
       {
         "pagePath": "pages/home/home",
@@ -52,5 +52,10 @@
   "cloud": true,
   "lazyCodeLoading": "requiredComponents",
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "permission": {
+    "scope.writePhotosAlbum": {
+      "desc": "用于把你写给自己的信保存成图片"
+    }
+  }
 }

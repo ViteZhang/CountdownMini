@@ -20,7 +20,7 @@ App({
 
     // ---- V2 新增 ----
     exam: null,               // 当前主考试
-    theme: 'cd-dark',         // 'cd-dark' | 'cd-light'
+    theme: 'cd-light',        // 'cd-dark' | 'cd-light'，默认白天
     themeMode: 'auto',        // 'auto' | 'dark' | 'light'
     firstLaunch: false
   },
@@ -88,12 +88,23 @@ App({
       const want = this.autoThemeByClock() === 'light' ? 'cd-light' : 'cd-dark';
       if (want !== this.globalData.theme) this.applyTheme('auto');
     }
+    // 每次都重设一遍 tabBar。原因见 applyTabBarTheme：onLaunch 里那次多半是失败的，
+    // 而主题没变化时又不会走 applyTheme，结果 tabBar 永远停在 app.json 的静态配色上。
+    this.applyTabBarTheme(this.globalData.theme === 'cd-light' ? 'light' : 'dark');
     return this.globalData.theme;
   },
 
-  /** tabBar 不受页面 CSS 变量影响，需要单独设色 */
+  /**
+   * tabBar 不受页面 CSS 变量影响，需要单独设色。
+   *
+   * 坑：onLaunch 阶段 tabBar 还没渲染，wx.setTabBarStyle 会直接 fail。
+   * 之前 fail 被空函数吃掉，又只在「主题发生变化」时才重设，于是冷启动进来
+   * 页面是浅色、tabBar 还是黑的。所以这里记录「真正设成功过的值」，
+   * 没成功过就一直重试，成功过且没变化才跳过。
+   */
   applyTabBarTheme(theme) {
     const light = theme === 'light';
+    if (this._tabBarApplied === theme) return;
     try {
       // 图标是 PNG，无法随主题重新着色，因此选用深浅底都读得清的两个颜色：
       // 未选中中性灰 #7A828C，选中品牌绿 #6E9480 —— 文字与图标同色，一套图标够用。
@@ -102,9 +113,12 @@ App({
         selectedColor: '#6E9480',
         backgroundColor: light ? '#FAFAF8' : '#101114',
         borderStyle: light ? 'white' : 'black',
-        fail: () => {}
+        success: () => { this._tabBarApplied = theme; },
+        fail: () => { this._tabBarApplied = null; }
       });
-    } catch (e) {}
+    } catch (e) {
+      this._tabBarApplied = null;
+    }
   },
 
   /** 同步 V2 exam 到旧字段，让未改造的老页面继续正常工作 */

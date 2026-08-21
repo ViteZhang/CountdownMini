@@ -29,7 +29,7 @@
     <view wx:if="{{!streaming}}" class="letter-actions">
       <view class="letter-act" bindtap="saveCard">
         <view class="letter-act-icon">💾</view>
-        <view class="letter-act-label">保存为卡片</view>
+        <view class="letter-act-label">{{saving ? '生成中…' : '保存为卡片'}}</view>
       </view>
       <view class="letter-act" bindtap="back">
         <view class="letter-act-icon">✖</view>
@@ -37,4 +37,7 @@
       </view>
     </view>
   </view>
+
+  <!-- 生成卡片用的离屏画布 -->
+  <canvas wx:if="{{stage === 'reading'}}" type="2d" id="cardCanvas" class="cardcanvas"></canvas>
 </view>

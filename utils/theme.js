@@ -25,7 +25,7 @@ function apply(page, customNav) {
     page.setData({ theme: t });
   }
   if (!customNav) {
-    const c = NAV[t] || NAV['cd-dark'];
+    const c = NAV[t] || NAV['cd-light'];
     try {
       wx.setNavigationBarColor({
         frontColor: c.front,
