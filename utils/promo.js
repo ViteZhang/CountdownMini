@@ -71,8 +71,9 @@ function refresh(cb) {
  * 打开推荐位。
  *
  * 小程序打不开外部网页：web-view 需要已备案且在后台配置过的业务域名，
- * 而个人主体的小程序根本不支持 web-view 组件。所以只能把链接给到用户，
- * 由他自己在浏览器里打开 —— 这是目前唯一走得通的路径。
+ * 而个人主体的小程序根本不支持 web-view 组件。所以只能把链接给到用户。
+ * 提示语说「发送到微信聊天中」而不是「去浏览器」：粘到聊天窗口里点开
+ * 就是微信内置浏览器，用户不用离开微信，这条路比切浏览器短。
  */
 function open(promo) {
   if (!promo || !promo.url) return;
@@ -81,7 +82,7 @@ function open(promo) {
     success: () => {
       wx.showModal({
         title: '链接已复制',
-        content: `${promo.url}\n\n粘贴到浏览器里就能打开。`,
+        content: `${promo.url}\n\n发送到微信聊天中就能打开。`,
         showCancel: false,
         confirmText: '知道了'
       });

@@ -39,18 +39,7 @@
 
     <!-- 成长物 -->
     <view class="cd-card treecard">
-      <view class="tree">
-        <view wx:if="{{tree.seed}}" class="tree-seed"></view>
-        <block wx:else>
-          <view class="tree-trunk" style="height: {{tree.trunk}}%;"></view>
-          <view
-            wx:for="{{tree.crowns}}"
-            wx:key="index"
-            class="tree-crown {{item.solid ? 'solid' : ''}}"
-            style="left: {{item.x}}%; bottom: {{item.y}}%; width: {{item.r * 2}}rpx; height: {{item.r * 2}}rpx; margin-left: -{{item.r}}rpx; margin-bottom: -{{item.r}}rpx;"
-          ></view>
-        </block>
-      </view>
+      <image class="tree" src="{{treeIcon}}" mode="aspectFit" aria-hidden="true"></image>
       <view class="tree-txt">
         <view class="tree-title">这棵树会在你考完那天开花</view>
         <view class="tree-stage">第 {{stageIndex}} 阶段 · {{stageName}}</view>
