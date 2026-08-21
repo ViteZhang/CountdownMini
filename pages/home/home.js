@@ -24,8 +24,8 @@ Page({
     // 进度环（纯 CSS 双半圆），避免 canvas 原生组件在 scroll-view 中不跟随滚动
     ringRightDeg: -135,
     ringLeftDeg: -315,
-    // 成长树（纯 CSS）
-    tree: { trunk: 0, crowns: [], seed: false, bloom: false },
+    // 成长树：七个阶段各一张图标
+    treeIcon: '/images/tree/seed.png',
 
     totalCheckins: 0,
     totalNotes: 0,
@@ -110,23 +110,17 @@ Page({
     });
   },
 
-  /** 成长树：形态只由 progress 映射出的阶段决定，与打卡无关 */
+  /**
+   * 成长树：形态只由 progress 映射出的阶段决定，与打卡无关。
+   *
+   * 原来是用几个 border-radius 的圈拼的，小尺寸下更像气泡不像树。
+   * 换成七张线稿图标（images/tree/），一个阶段一张。
+   * 图标只有一种绿色 —— 深浅两个主题都读得清，不必备两套。
+   */
   layoutTree(stageKey) {
-    const order = ['seed', 'sprout', 'branch', 'leaf', 'lush', 'bud', 'bloom'];
-    const lv = Math.max(order.indexOf(stageKey), 0);
-    const bloom = stageKey === 'bloom';
-
-    if (lv === 0) {
-      this.setData({ tree: { trunk: 12, crowns: [], seed: true, bloom: false } });
-      return;
-    }
-
-    const trunk = 16 + 60 * (lv / 6);          // rpx 百分比基准，见 wxss
-    const crowns = [{ x: 50, y: trunk + 6, r: 9 + lv * 2.6, solid: bloom }];
-    if (lv >= 2) crowns.push({ x: 26, y: trunk * 0.72, r: 5 + lv * 1.6, solid: bloom });
-    if (lv >= 3) crowns.push({ x: 74, y: trunk * 0.84, r: 6 + lv * 1.6, solid: bloom });
-
-    this.setData({ tree: { trunk, crowns, seed: false, bloom } });
+    const known = ['seed', 'sprout', 'branch', 'leaf', 'lush', 'bud', 'bloom'];
+    const key = known.indexOf(stageKey) >= 0 ? stageKey : 'seed';
+    this.setData({ treeIcon: `/images/tree/${key}.png` });
   },
 
   buildHint(s) {

@@ -112,7 +112,7 @@
 .ring-line { width: 184rpx; height: 1rpx; background: var(--cd-line); margin: 26rpx 0 22rpx; }
 .ring-passed { font-size: 26rpx; color: var(--cd-t2); }
 
-/* ---- 成长物（纯 CSS） ---- */
+/* ---- 成长物 ---- */
 .treecard {
   margin: 12rpx 44rpx 0;
   display: flex;
@@ -120,36 +120,9 @@
   gap: 26rpx;
 }
 .tree {
-  position: relative;
-  width: 80rpx;
-  height: 96rpx;
+  width: 104rpx;
+  height: 104rpx;
   flex-shrink: 0;
-}
-.tree-trunk {
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 3rpx;
-  margin-left: -1.5rpx;
-  background: var(--cd-tree);
-  border-radius: 3rpx;
-}
-.tree-crown {
-  position: absolute;
-  box-sizing: border-box;
-  border: 3rpx solid var(--cd-tree);
-  border-radius: 50%;
-}
-.tree-crown.solid { background: var(--cd-tree); }
-.tree-seed {
-  position: absolute;
-  left: 50%;
-  bottom: 8rpx;
-  width: 16rpx;
-  height: 22rpx;
-  margin-left: -8rpx;
-  background: var(--cd-tree);
-  border-radius: 50%;
 }
 
 .tree-title { font-size: 26rpx; color: var(--cd-t1); }
