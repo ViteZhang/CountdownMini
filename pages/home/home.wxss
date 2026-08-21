@@ -187,6 +187,25 @@
 .hint-txt { font-size: 24rpx; color: var(--cd-t2); flex: 1; }
 .hint-arrow { font-size: 30rpx; color: var(--cd-t3); }
 
+/* ---- 推荐位 ---- */
+/* 与数据卡同一套视觉：同样的圆角、同样的左右边距、同样的字号层级，
+   只是把数字换成了名字。不做高亮、不加颜色 —— 它是页面的一部分，不是插播广告。 */
+.promo {
+  margin: 24rpx 44rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.promo-lab { font-size: 22rpx; color: var(--cd-t2); }
+.promo-title {
+  font-size: 36rpx;
+  font-weight: 300;
+  color: var(--cd-t1);
+  margin-top: 6rpx;
+  letter-spacing: -1rpx;
+}
+.promo-act { font-size: 24rpx; color: var(--cd-t3); }
+
 .bottom-pad { height: 80rpx; }
 
 /* ---- 心里话弹层 ---- */

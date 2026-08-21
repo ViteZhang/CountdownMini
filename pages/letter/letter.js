@@ -3,6 +3,7 @@
 // 封存信的正文永远由服务端在到期后下发，客户端不缓存、不预取。
 const api = require('../../utils/api.js');
 const nav = require('../../utils/nav.js');
+const card = require('../../utils/card.js');
 
 Page({
   data: {
@@ -13,7 +14,9 @@ Page({
     contentShown: '',
     streaming: false,
     sign: '',
+    openAt: '',
     nickname: '',
+    saving: false,
     stars: [],
     letterId: ''
   },
@@ -52,6 +55,7 @@ Page({
         this.setData({
           content,
           letterId: id,
+          openAt: res.open_at || '',
           // 自己写的信落款是过去的自己；旧的 AI 代写信保持原来的署名
           sign: res.kind === 'ai' ? '—— 星语' : '—— 过去的你'
         });
@@ -89,8 +93,58 @@ Page({
     step();
   },
 
-  saveCard() {
-    wx.showToast({ title: '卡片生成 V1.1 上线', icon: 'none' });
+  /**
+   * 存成图片。整条链路：离屏 canvas 画一张 → 导出临时文件 → 存相册。
+   *
+   * 相册权限被拒时不是死路：退回 previewImage，用户长按也能存下来。
+   * 这比弹一句「保存失败」有用得多。
+   */
+  async saveCard() {
+    if (this.data.saving || this.data.streaming) return;
+    this.setData({ saving: true });
+    wx.showLoading({ title: '正在生成', mask: true });
+
+    let tempPath = '';
+    try {
+      tempPath = await card.render(this, '#cardCanvas', {
+        head: `${this.data.nickname || '亲爱的我'}：`,
+        body: this.data.content,
+        sign: this.data.sign,
+        openAt: this.data.openAt
+      });
+    } catch (e) {
+      wx.hideLoading();
+      this.setData({ saving: false });
+      console.error('[saveCard]', e);
+      wx.showToast({ title: '没能生成卡片', icon: 'none' });
+      return;
+    }
+
+    wx.hideLoading();
+    this.setData({ saving: false });
+
+    wx.saveImageToPhotosAlbum({
+      filePath: tempPath,
+      success: () => wx.showToast({ title: '已存到相册', icon: 'success' }),
+      fail: (err) => {
+        const denied = String((err && err.errMsg) || '').indexOf('auth deny') >= 0
+          || String((err && err.errMsg) || '').indexOf('authorize') >= 0;
+        if (denied) {
+          wx.showModal({
+            title: '需要相册权限',
+            content: '开启后就能把这张卡片存下来。也可以先预览，长按图片保存。',
+            confirmText: '去开启',
+            cancelText: '先预览',
+            success: (res) => {
+              if (res.confirm) wx.openSetting({});
+              else wx.previewImage({ urls: [tempPath] });
+            }
+          });
+          return;
+        }
+        wx.previewImage({ urls: [tempPath] });
+      }
+    });
   },
 
   back() {

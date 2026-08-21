@@ -7,10 +7,17 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
 function ok(data) { return { code: 0, data }; }
+/*
+ * 云函数容器的时区是 UTC。用它判断「今天」，北京时间 0 点到 8 点之间会算成昨天。
+ * 这里的后果是打卡直接失败：用户凌晨 0 点半打卡，客户端传的是 21 号，
+ * 服务端认为今天是 20 号，delta = -1 被当成「未来日期」挡掉。
+ * 所以先把绝对时间平移到东八区，再取 UTC 年月日。
+ */
+const CST_OFFSET = 8 * 3600 * 1000;
 function todayStr() {
-  const d = new Date();
+  const d = new Date(Date.now() + CST_OFFSET);
   const pad = n => n < 10 ? '0' + n : '' + n;
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())}`;
 }
 function isDateKey(s) { return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s); }
 

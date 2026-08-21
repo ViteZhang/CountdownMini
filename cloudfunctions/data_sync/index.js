@@ -15,7 +15,13 @@ function ok(data) { return { code: 0, data }; }
 function err(msg) { return { code: 1, msg }; }
 
 const pad = n => n < 10 ? '0' + n : '' + n;
-const keyOf = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+// 云函数容器跑在 UTC，直接取 getDate() 在北京时间 0-8 点会算成昨天。
+// 先平移到东八区再取 UTC 年月日。
+const CST_OFFSET = 8 * 3600 * 1000;
+const keyOf = d => {
+  const t = new Date(d.getTime() + CST_OFFSET);
+  return `${t.getUTCFullYear()}-${pad(t.getUTCMonth() + 1)}-${pad(t.getUTCDate())}`;
+};
 
 async function getPrimaryExam(openid) {
   try {
@@ -41,9 +47,9 @@ async function ensureExam(openid, hint) {
   // 目标日期：客户端传来的优先，否则用「6/8 后切下一年」的高考规则
   let target = hint && hint.target_date;
   if (!target) {
-    const now = new Date();
-    let y = now.getFullYear();
-    if (now >= new Date(y, 5, 8)) y += 1;
+    const today = keyOf(new Date());
+    let y = +today.slice(0, 4);
+    if (today >= `${y}-06-08`) y += 1;
     target = `${y}-06-07`;
   }
 
